@@ -8,6 +8,6 @@
 	};
 </script>
 
-<style lang="scss">
-	@import 'assets/sass/sunui.scss';
+<style lang="css">
+	
 </style>
