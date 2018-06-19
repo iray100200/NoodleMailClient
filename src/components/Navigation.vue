@@ -1,14 +1,15 @@
 <template>
   <div class="n-navigation">
-    <div class="n-logo-cont">
-
+    <div class="n-logo-cont n-vh-center">
+      <Icon type="ios-drag" size="24"></Icon>
     </div>
     <div class="n-nav-cont">
       <ul>
-        <li><i class="material-icons" v-on:click="create()">create</i></li>
-        <li><i class="material-icons" v-on:click="inbox()">email</i></li>
-        <li><i class="material-icons" v-on:click="outbox()">send</i></li>
-        <li><i class="material-icons" v-on:click="drafts()">border_color</i></li>
+        <li><Icon type="ios-person-outline" size="25"></Icon></li>
+        <li><Icon type="ios-plus-outline" size="24"></Icon></li>
+        <li><Icon type="ios-email-outline" size="24"></Icon></li>
+        <li><Icon type="ios-loop" size="22"></Icon></li>
+        <li><Icon type="ios-more-outline" size="24"></Icon></li>
       </ul>
     </div>
   </div>
@@ -21,6 +22,10 @@
 }
 .n-logo-cont {
   height: 48px;
+  color: white;
+}
+.n-logo-cont:hover {
+  background: rgba(222, 222, 222, 0.25);
 }
 .n-nav-cont ul {
   margin: 0;
