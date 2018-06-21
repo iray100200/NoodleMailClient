@@ -4,7 +4,10 @@
     <div class="n-overflow-y n-list-cont">
       <ul>
         <li class="mail-item n-flex" v-for="item in mails">
-          <div class="n-m-from n-vh-center">{{item.header.from[0].charAt(0)}}</div>
+
+          <div class="n-m-from n-vh-center">
+            <Avatar style="background-color: #87d068" icon="person" />
+          </div>
           <div class="n-m-context">
             <div>{{item.header.subject[0]}}</div>
             <div>{{item.header.date[0]}}</div>
@@ -29,7 +32,6 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background: #ccc;
   }
   .n-m-context {
     flex: 1;
