@@ -4,13 +4,18 @@
     <div class="n-overflow-y n-list-cont">
       <ul>
         <li class="mail-item n-flex" v-for="item in mails">
-
-          <div class="n-m-from n-vh-center">
-            <Avatar style="background-color: #87d068" icon="person" />
+          <div class="n-m-from n-flex">
+            <div class="n-avator-cont n-v-center">
+              <Avatar shape="square" style="background-color: #87d068" icon="person" />
+            </div>
+            <div class="n-h-center n-align-v">
+              <p>{{item.header.from[0].split(' ')[0]}}</p>
+              <p class="n-date">{{new Date(item.header.date[0]).format('yyyy/MM/dd hh:mm')}}</p>
+            </div>
           </div>
           <div class="n-m-context">
             <div>{{item.header.subject[0]}}</div>
-            <div>{{item.header.date[0]}}</div>
+            <div></div>
           </div>
         </li>
       </ul>
@@ -24,18 +29,30 @@
   }
   .n-list-cont {
     padding: 8px;
+    width: 360px;
   }
   .mail-item {
-    padding: 8px;
+    padding: 6px 12px;
+    margin: 5px;
+    display: inline-block;
+    width: calc(100% - 10px);
+    background-color: #efeff2;
   }
   .n-m-from {
-    width: 60px;
-    height: 60px;
+    height: 44px;
     border-radius: 50%;
   }
   .n-m-context {
     flex: 1;
-    padding: 4px 8px;
+    padding: 4px 0;
+    font-size: 1.06em;
+    font-weight: 600;
+  }
+  .n-avator-cont {
+    width: 44px;
+  }
+  .n-date {
+    font-size: 12px;
   }
 </style>
 
