@@ -115,10 +115,12 @@
     },
     methods: {
       ...mapActions('mailsys', [
-        'fetchMailListAsync'
+        'fetchMailListAsync',
+        'markSeen'
       ]),
       retrieveHtml(item) {
         item.body.text ? this.html = item.body.text : ''
+        this.markSeen(item)
       },
       mousemove(e, index) {
         this.currentSelected = index

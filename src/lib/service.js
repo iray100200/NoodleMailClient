@@ -47,3 +47,17 @@ export const fetchDetails = (uuid, resultList) => {
     .then(res => res.json())
     .then(res => res.data)
 }
+
+export const markSeen = (uuid) => {
+  return fetch('http://localhost:3000/imap/mark/flag', {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      uuid
+    })
+  })
+    .then(res => res.json())
+    .then(res => res.data)
+}

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchDB, fetchList, fetchDetails } from './service'
+import { fetchDB, fetchList, fetchDetails, markSeen } from './service'
 import { sort, isunseen } from './utils'
 
 Vue.use(Vuex)
@@ -17,10 +17,20 @@ const state = {
 const mutations = {
   fetch(state, payload) {
     state.mails.data = payload.data
+  },
+  markSeen(state, payload) {
+
   }
 }
 
 const actions = {
+  markSeen({ commit }, value) {
+    (async () => {
+      markSeen(value.uid).then(() => {
+        commit('markSeen', value.uid)
+      })
+    })()
+  },
   fetchMailListAsync({ commit }) {
     (async () => {
       try {
