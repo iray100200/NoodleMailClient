@@ -3,7 +3,11 @@
     <Navigation v-on:inbox="getInbox()"></Navigation>
     <div class="n-overflow-y n-list-cont">
       <ul>
-        <li class="mail-item n-flex" v-for="item in mails">
+        <li class="mail-item n-flex" 
+          v-for="(item, index) in mails" 
+          v-on:mousemove="mousemove($event, index)"
+          v-on:mouseout="mouseout($event, index)"
+          v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
           <div class="n-m-from n-flex" v-on:click="retrieveHtml(item)">
             <div class="n-avator-cont n-v-center">
               <div v-if="item.isunseen">
@@ -48,7 +52,18 @@
     margin: 5px;
     display: inline-block;
     width: calc(100% - 10px);
-    background-color: #f0f0f3;
+    background-image: linear-gradient(90deg, rgba(80, 96, 96, 0.3) 0%, rgba(0, 0, 0, 0) 50%, rgba(80, 96, 96, 0.3) 100%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    background-color: #f6f6f8;
+    transition: 0.3s background-color;
+  }
+  .mail-item:hover {
+    padding: 6px 12px;
+    margin: 5px;
+    display: inline-block;
+    width: calc(100% - 10px);
+    background-color: #f6f5ec;
   }
   .n-m-from {
     height: 44px;
@@ -103,6 +118,14 @@
       ]),
       retrieveHtml(item) {
         item.body.text ? this.html = item.body.text : ''
+      },
+      mousemove(e, index) {
+        this.currentSelected = index
+        let w = e.currentTarget.offsetWidth
+        this.positionX = ((w - e.offsetX) / w * 100) + '%'
+      },
+      mouseout(e, index) {
+        this.currentSelected = -1
       }
     },
     components: {
@@ -111,17 +134,20 @@
     mixins: [base],
     data() {
       return {
-        html: ''
+        html: '',
+        currentSelected: -1,
+        positionX: '100%',
+        start: 0
       }
     },
     mounted() {
       this.fetchMailListAsync()
     },
     updated() {
-      console.log(this)
+      
     },
     beforeUpdate() {
-      console.log(this)
+      
     }
   }
 </script>
