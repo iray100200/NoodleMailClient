@@ -1,65 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import NoodleDB from './database'
+import { fetchDB, fetchList, fetchDetails } from './service'
+import { sort, isunseen, parseFrom } from './utils'
 
 Vue.use(Vuex)
 
 const state = {
   accounts: [],
-  mails: {}
-}
-
-const fetchDB = () => {
-  return new Promise((resolve) => {
-    let dbInstance = new NoodleDB()
-    dbInstance.connect('noodle', 1)
-    dbInstance.install([{ name: 'mails', keyPath: 'uid' }])
-    dbInstance.open('mails').then(db => {
-      let transaction = db.transaction(['mails'], "readonly")
-      let store = transaction.objectStore('mails')
-      store.getAll().onsuccess = function (e) {
-        resolve({ result: e.target.result, db })
-      }
-    })
-  })
-}
-
-const fetchList = () => {
-  return fetch('http://localhost:3000/imap/receive/list/all', {
-    method: 'POST',
-    body: JSON.stringify({
-      condition: 'ALL',
-      date: (new Date(2017, 11, 12)).toDateString(),
-      username: 'tb100200@outlook.com',
-      password: 'lming#1oo200',
-      host: 'outlook'
-    }),
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  })
-    .then(res => res.json())
-    .then(res => res.data)
-}
-
-const fetchDetails = (uuid, resultList) => {
-  return fetch('http://localhost:3000/imap/receive/details', {
-    method: 'POST',
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    }),
-    body: JSON.stringify({
-      list: resultList,
-      uuid
-    })
-  })
-    .then(res => res.json())
-    .then(res => res.data)
+  mails: {
+    data: [],
+    order: 'desc',
+    orderBy: 'attributes.date'
+  }
 }
 
 const mutations = {
   fetch(state, payload) {
-    state.mails = payload.data
+    state.mails.data = payload.data
   }
 }
 
@@ -95,7 +52,13 @@ const actions = {
           })
         }
         commit('fetch', {
-          data: mailList
+          data: sort(Object.values(mailList), 'attributes.date', 'Date').map(t => {
+            t.isunseen = isunseen(t)
+            t.header.from = parseFrom(t.header.from[0])
+            t.header.date = t.header.date[0]
+            t.header.subject = t.header.subject[0]
+            return t
+          })
         })
       } catch (e) {
         console.log(e)
@@ -104,7 +67,13 @@ const actions = {
   }
 }
 
-const getters = {}
+const getters = {
+  parse: state => () => {
+    return state.mails
+  },
+  sort: () => sort,
+  isunseen: () => isunseen
+}
 
 export default new Vuex.Store({
   modules: {

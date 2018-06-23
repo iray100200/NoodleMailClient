@@ -1,0 +1,49 @@
+import NoodleDB from './database'
+
+export const fetchDB = () => {
+  return new Promise((resolve) => {
+    let dbInstance = new NoodleDB()
+    dbInstance.connect('noodle', 1)
+    dbInstance.install([{ name: 'mails', keyPath: 'uid' }])
+    dbInstance.open('mails').then(db => {
+      let transaction = db.transaction(['mails'], "readonly")
+      let store = transaction.objectStore('mails')
+      store.getAll().onsuccess = function (e) {
+        resolve({ result: e.target.result, db })
+      }
+    })
+  })
+}
+
+export const fetchList = () => {
+  return fetch('http://localhost:3000/imap/receive/list/all', {
+    method: 'POST',
+    body: JSON.stringify({
+      condition: 'ALL',
+      date: (new Date(2017, 11, 12)).toDateString(),
+      username: 'tb100200@outlook.com',
+      password: 'lming#1oo200',
+      host: 'outlook'
+    }),
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  })
+    .then(res => res.json())
+    .then(res => res.data)
+}
+
+export const fetchDetails = (uuid, resultList) => {
+  return fetch('http://localhost:3000/imap/receive/details', {
+    method: 'POST',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify({
+      list: resultList,
+      uuid
+    })
+  })
+    .then(res => res.json())
+    .then(res => res.data)
+}

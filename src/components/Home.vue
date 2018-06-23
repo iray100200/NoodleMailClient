@@ -4,21 +4,33 @@
     <div class="n-overflow-y n-list-cont">
       <ul>
         <li class="mail-item n-flex" v-for="item in mails">
-          <div class="n-m-from n-flex">
+          <div class="n-m-from n-flex" v-on:click="retrieveHtml(item)">
             <div class="n-avator-cont n-v-center">
-              <Avatar shape="square" style="background-color: #87d068" icon="person" />
+              <div v-if="item.isunseen">
+                <Badge dot>
+                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                </Badge>
+              </div>
+              <div v-else>
+                <Badge>
+                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                </Badge>
+              </div>
             </div>
             <div class="n-h-center n-align-v">
-              <p>{{item.header.from[0].split(' ')[0]}}</p>
-              <p class="n-date">{{new Date(item.header.date[0]).format('yyyy/MM/dd hh:mm')}}</p>
+              <p class="n-from-name">{{item.header.from.name}}</p>
+              <p class="n-date">{{new Date(item.header.date).format('yyyy/MM/dd hh:mm')}}</p>
             </div>
           </div>
           <div class="n-m-context">
-            <div>{{item.header.subject[0]}}</div>
+            <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.header.subject}}</div>
             <div></div>
           </div>
         </li>
       </ul>
+    </div>
+    <div class="n-html-cont n-overflow-h">
+      <iframe width="100%" height="100%" frameborder="0" scrolling="auto" v-bind:srcdoc="html"></iframe>
     </div>
   </div>
 </template>
@@ -36,49 +48,73 @@
     margin: 5px;
     display: inline-block;
     width: calc(100% - 10px);
-    background-color: #efeff2;
+    background-color: #f0f0f3;
   }
   .n-m-from {
     height: 44px;
     border-radius: 50%;
   }
+  .n-from-name {
+    color: #130c0e;
+  }
   .n-m-context {
     flex: 1;
     padding: 4px 0;
     font-size: 1.06em;
-    font-weight: 600;
   }
   .n-avator-cont {
     width: 44px;
   }
   .n-date {
     font-size: 12px;
+    color: #999d9c;
+  }
+  .n-seen {
+    font-weight: 400;
+  }
+  .n-unseen {
+    font-weight: 600;
+  }
+  .n-html-cont {
+    flex: 1;
   }
 </style>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
+  import { mapState, mapActions, mapGetters } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation';
   export default {
-    computed: mapState({
-      mails: state => {
-        return state.mailsys.mails
+    computed: {
+      ...mapState({
+        mails: state => {
+          return state.mailsys.mails.data
+        }
+      }),
+      ...mapGetters({
+        parse: 'mailsys/parse',
+        sort: 'mailsys/sort',
+        isunseen: 'mailsys/isunseen'
+      })
+    },
+    methods: {
+      ...mapActions('mailsys', [
+        'fetchMailListAsync'
+      ]),
+      retrieveHtml(item) {
+        item.body.text ? this.html = item.body.text : ''
       }
-    }),
-    methods: mapActions('mailsys', [
-      'fetchMailListAsync'
-    ]),
+    },
     components: {
       Navigation
     },
     mixins: [base],
     data() {
       return {
-        msg: "Welcome to Your Vue.js App"
+        html: ''
       }
     },
-    mounted () {
+    mounted() {
       this.fetchMailListAsync()
     },
     updated() {

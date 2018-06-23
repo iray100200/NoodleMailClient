@@ -15,6 +15,7 @@
 	html, body {
 		height: 100%;
 		margin: 0;
+		font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 	}
 	li {
 		list-style: none;
@@ -42,12 +43,15 @@
 		flex-direction: column;
 	}
 	.n-overflow {
-		overflow: scroll;
+		overflow: auto;
 	}
 	.n-overflow-x {
-		overflow-x: scroll;
+		overflow-x: auto;
 	}
 	.n-overflow-y {
-		overflow-y: scroll;
+		overflow-y: auto;
+	}
+	.n-overflow-h {
+		overflow: hidden;
 	}
 </style>
