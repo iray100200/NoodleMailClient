@@ -21,11 +21,3 @@ export const sort = (data, key, type) => {
 export const isunseen = (item) => {
   return item.attributes.flags.indexOf('\\Seen') < 0
 }
-
-export const parseFrom = (str) => {
-  let p = str.match(/\"?([^\"]+)\"?\s\<([\w\W]*)\>/)
-  return {
-    name: p[1],
-    address: p[2]
-  }
-}

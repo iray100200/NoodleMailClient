@@ -22,12 +22,12 @@
               </div>
             </div>
             <div class="n-h-center n-align-v">
-              <p class="n-from-name">{{item.header.from.name}}</p>
-              <p class="n-date">{{new Date(item.header.date).format('yyyy/MM/dd hh:mm')}}</p>
+              <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
+              <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
             </div>
           </div>
           <div class="n-m-context">
-            <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.header.subject}}</div>
+            <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.attributes.envelope.subject}}</div>
             <div></div>
           </div>
         </li>
@@ -57,6 +57,7 @@
     background-position: 100% 0;
     background-color: #f6f6f8;
     transition: 0.3s background-color;
+    will-change: background;
   }
   .mail-item:hover {
     padding: 6px 12px;
@@ -126,6 +127,9 @@
       },
       mouseout(e, index) {
         this.currentSelected = -1
+      },
+      convertFromToNames(array) {
+        return array.map(m => m.name).join(', ')
       }
     },
     components: {

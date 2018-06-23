@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { fetchDB, fetchList, fetchDetails } from './service'
-import { sort, isunseen, parseFrom } from './utils'
+import { sort, isunseen } from './utils'
 
 Vue.use(Vuex)
 
@@ -54,9 +54,6 @@ const actions = {
         commit('fetch', {
           data: sort(Object.values(mailList), 'attributes.date', 'Date').map(t => {
             t.isunseen = isunseen(t)
-            t.header.from = parseFrom(t.header.from[0])
-            t.header.date = t.header.date[0]
-            t.header.subject = t.header.subject[0]
             return t
           })
         })
