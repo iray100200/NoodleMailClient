@@ -120,7 +120,7 @@
       ]),
       retrieveHtml(item) {
         item.body.text ? this.html = item.body.text : ''
-        this.markSeen(item)
+        if (item.isunseen) this.markSeen(item)
       },
       mousemove(e, index) {
         this.currentSelected = index
