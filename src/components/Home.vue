@@ -4,11 +4,12 @@
     <div class="n-overflow-y n-list-cont">
       <ul>
         <li class="mail-item n-flex" 
-          v-for="(item, index) in mails" 
+          v-for="(item, index) in mails"
+          v-on:click="retrieveHtml(item)"
           v-on:mousemove="mousemove($event, index)"
           v-on:mouseout="mouseout($event, index)"
           v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
-          <div class="n-m-from n-flex" v-on:click="retrieveHtml(item)">
+          <div class="n-m-from n-flex">
             <div class="n-avator-cont n-v-center">
               <div v-if="item.isunseen">
                 <Badge dot>

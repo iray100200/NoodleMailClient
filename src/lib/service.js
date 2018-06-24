@@ -48,14 +48,16 @@ export const fetchDetails = (uuid, resultList) => {
     .then(res => res.data)
 }
 
-export const markSeen = (uuid) => {
+export const markSeen = (uuid, uid) => {
   return fetch('http://localhost:3000/imap/mark/flag', {
     method: 'POST',
     headers: new Headers({
       'Content-Type': 'application/json'
     }),
     body: JSON.stringify({
-      uuid
+      flag: '\\Seen',
+      uuid,
+      uid
     })
   })
     .then(res => res.json())

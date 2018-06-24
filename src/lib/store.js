@@ -11,12 +11,14 @@ const state = {
     data: [],
     order: 'desc',
     orderBy: 'attributes.date'
-  }
+  },
+  uuid: null
 }
 
 const mutations = {
   fetch(state, payload) {
     state.mails.data = payload.data
+    state.uuid = payload.uuid
   },
   markSeen(state, payload) {
 
@@ -24,12 +26,10 @@ const mutations = {
 }
 
 const actions = {
-  markSeen({ commit }, value) {
-    (async () => {
-      markSeen(value.uid).then(() => {
-        commit('markSeen', value.uid)
-      })
-    })()
+  markSeen({ state, commit }, value) {
+    markSeen(state.uuid, value.attributes.uid).then(() => {
+      commit('markSeen', value.uid)
+    })
   },
   fetchMailListAsync({ commit }) {
     (async () => {
@@ -65,7 +65,8 @@ const actions = {
           data: sort(Object.values(mailList), 'attributes.date', 'Date').map(t => {
             t.isunseen = isunseen(t)
             return t
-          })
+          }),
+          uuid: fetchListResult.uuid
         })
       } catch (e) {
         console.log(e)
