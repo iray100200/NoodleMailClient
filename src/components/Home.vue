@@ -4,7 +4,7 @@
     <div class="n-overflow-y n-list-cont">
       <ul>
         <li class="mail-item n-flex" 
-          v-for="(item, index) in mails"
+          v-for="(item, index) in map(mails)"
           v-on:click="retrieveHtml(item)"
           v-on:mousemove="mousemove($event, index)"
           v-on:mouseout="mouseout($event, index)"
@@ -56,8 +56,8 @@
     background-image: linear-gradient(90deg, rgba(80, 96, 96, 0.3) 0%, rgba(0, 0, 0, 0) 50%, rgba(80, 96, 96, 0.3) 100%);
     background-size: 200% 100%;
     background-position: 100% 0;
-    background-color: #f6f6f8;
-    transition: 0.3s background-color;
+    background-color: #f2f6f4;
+    transition: 0.6s background-color;
     will-change: background;
   }
   .mail-item:hover {
@@ -98,20 +98,19 @@
 </style>
 
 <script>
+  import { isunseen } from '../lib/utils'
   import { mapState, mapActions, mapGetters } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation';
   export default {
     computed: {
       ...mapState({
-        mails: state => {
-          return state.mailsys.mails.data
-        }
+        mails: state => state.mailsys.mails.data
       }),
       ...mapGetters({
         parse: 'mailsys/parse',
         sort: 'mailsys/sort',
-        isunseen: 'mailsys/isunseen'
+        map: 'mailsys/map'
       })
     },
     methods: {

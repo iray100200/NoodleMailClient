@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchDB, fetchList, fetchDetails, markSeen } from './service'
+import { fetchDB, updateDB, fetchList, fetchDetails, markSeen } from './service'
 import { sort, isunseen } from './utils'
 
 Vue.use(Vuex)
@@ -21,15 +21,24 @@ const mutations = {
     state.uuid = payload.uuid
   },
   markSeen(state, payload) {
-
+    state.mails = { ...payload }
   }
 }
 
 const actions = {
   markSeen({ state, commit }, value) {
-    markSeen(state.uuid, value.attributes.uid).then(() => {
-      commit('markSeen', value.uid)
-    })
+    (async () => {
+      let uid = value.attributes.uid
+      let item = state.mails.data.find(f => {
+        return f.attributes.uid === uid
+      })
+      if (item) {
+        item.attributes.flags = ['\\Seen']
+        updateDB(uid, item)
+      }
+      commit('markSeen', state.mails)
+      await markSeen(state.uuid, uid)
+    })()
   },
   fetchMailListAsync({ commit }) {
     (async () => {
@@ -62,10 +71,7 @@ const actions = {
           })
         }
         commit('fetch', {
-          data: sort(Object.values(mailList), 'attributes.date', 'Date').map(t => {
-            t.isunseen = isunseen(t)
-            return t
-          }),
+          data: sort(Object.values(mailList), 'attributes.date', 'Date'),
           uuid: fetchListResult.uuid
         })
       } catch (e) {
@@ -80,7 +86,12 @@ const getters = {
     return state.mails
   },
   sort: () => sort,
-  isunseen: () => isunseen
+  map: () => (data) => {
+    return data.map(m => {
+      m.isunseen = isunseen(m)
+      return m
+    })
+  }
 }
 
 export default new Vuex.Store({

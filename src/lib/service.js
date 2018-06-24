@@ -15,6 +15,27 @@ export const fetchDB = () => {
   })
 }
 
+export const updateDB = (uid, data) => {
+  let dbInstance = new NoodleDB()
+  dbInstance.connect('noodle', 1)
+  dbInstance.open('mails').then(db => {
+    let transaction = db.transaction(['mails'], "readwrite")
+    let store = transaction.objectStore('mails')
+    let req = store.openCursor()
+    req.onsuccess = function (e) {
+      let cursor = e.target.result
+      if (cursor) {
+        if (cursor.primaryKey === uid) {
+          cursor.update({
+            uid, data
+          })
+        }
+        cursor.continue()
+      }
+    }
+  })
+}
+
 export const fetchList = () => {
   return fetch('http://localhost:3000/imap/receive/list/all', {
     method: 'POST',
