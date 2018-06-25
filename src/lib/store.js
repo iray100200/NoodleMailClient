@@ -77,9 +77,7 @@ const actions = {
             data: o
           })
         }
-        if (removeList.length > 0) {
-          removeList.forEach(a => store.delete(a))
-        }
+        removeList.forEach(a => store.delete(a))
         commit('fetch', {
           data: sort(mailList, 'attributes.date', 'Date'),
           uuid: fetchListResult.uuid
