@@ -24,6 +24,9 @@ export default class NoodleDBClinet {
         db.onerror = function (event) {
           console.log("Error creating/accessing IndexedDB database")
         }
+        db.onsuccess = function (event) {
+          console.log(event)
+        }
         resolve(db)
       }
     })
