@@ -45,33 +45,43 @@ const actions = {
       try {
         let fetchDBResult = await fetchDB()
         let fetchListResult = await fetchList()
-        let list = []
-        let mailList = {}
+        let addlist = [], removeList = [], mailList = []
         if (fetchDBResult.result.length > 0) {
           fetchDBResult.result.forEach(f => {
-            mailList[f.uid] = f.data
+            if (!fetchListResult.result.some(s => {
+              return s === f.uid
+            })) {
+              removeList.push(f.uid)
+            } else {
+              mailList.push(f.data)
+            }
           })
           fetchListResult.result.forEach(f => {
-            if (!mailList.hasOwnProperty(f)) {
-              list.push(f)
+            if (!fetchDBResult.result.some(s => {
+              return s.uid === f
+            })) {
+              addlist.push(f)
             }
           })
         } else {
-          list = fetchListResult.result
+          addlist = fetchListResult.result
         }
-        let fetchDetailsResult = await fetchDetails(fetchListResult.uuid, list)
+        let fetchDetailsResult = await fetchDetails(fetchListResult.uuid, addlist)
         let transaction = fetchDBResult.db.transaction(['mails'], "readwrite")
         let store = transaction.objectStore('mails')
         for (var r in fetchDetailsResult.result) {
           let o = fetchDetailsResult.result[r]
-          mailList[o.attributes.uid] = o
+          mailList.push(o)
           store.add({
             uid: o.attributes.uid,
             data: o
           })
         }
+        if (removeList.length > 0) {
+          removeList.forEach(a => store.delete(a))
+        }
         commit('fetch', {
-          data: sort(Object.values(mailList), 'attributes.date', 'Date'),
+          data: sort(mailList, 'attributes.date', 'Date'),
           uuid: fetchListResult.uuid
         })
       } catch (e) {
