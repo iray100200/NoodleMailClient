@@ -21,3 +21,8 @@ new Vue({
   template: '<App/>',
   style: ''
 })
+
+window.resizeHeight = function (obj) {
+  obj.height = obj.contentDocument.body.scrollHeight + 'px'
+  obj.width = obj.contentDocument.body.scrollWidth + 'px'
+}

@@ -1,55 +1,14 @@
-<template>
-  <div class="n-home n-flex">
-    <Navigation v-on:inbox="getInbox()"></Navigation>
-    <div class="n-overflow-y n-list-cont">
-      <ul>
-        <li class="mail-item n-flex" 
-          v-for="(item, index) in map(mails)"
-          v-on:click="retrieveHtml(item)"
-          v-on:mousemove="mousemove($event, index)"
-          v-on:mouseout="mouseout($event, index)"
-          v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
-          <div class="n-m-from n-flex">
-            <div class="n-avator-cont n-v-center">
-              <div v-if="item.isunseen">
-                <Badge dot>
-                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                </Badge>
-              </div>
-              <div v-else>
-                <Badge>
-                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                </Badge>
-              </div>
-            </div>
-            <div class="n-h-center n-align-v">
-              <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
-              <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
-            </div>
-          </div>
-          <div class="n-m-context">
-            <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.attributes.envelope.subject}}</div>
-            <div></div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="n-html-cont n-overflow-h">
-      <iframe width="100%" height="100%" frameborder="0" scrolling="auto" v-bind:srcdoc="html"></iframe>
-    </div>
-  </div>
-</template>
-
 <style>
   .n-home {
     height: 100%;
   }
   .n-list-cont {
-    padding: 8px;
+    padding: 6px 5px 6px 6px;
     width: 360px;
   }
   .mail-item {
     padding: 6px 12px;
+    border-radius: 4px;
     margin: 5px;
     display: inline-block;
     width: calc(100% - 10px);
@@ -95,7 +54,61 @@
   .n-html-cont {
     flex: 1;
   }
+  .n-frame-head {
+    height: 84px;
+  }
+  .n-frame-body {
+    flex: 1;
+    overflow: auto;
+    padding: 20px 0 10px 0;
+  }
 </style>
+<template>
+  <div class="n-home n-flex">
+    <Navigation v-on:inbox="getInbox()"></Navigation>
+    <div class="n-overflow-y n-list-cont">
+      <ul>
+        <li class="mail-item n-flex" 
+          v-for="(item, index) in map(mails)"
+          v-on:click="retrieveHtml(item)"
+          v-on:mousemove="mousemove($event, index)"
+          v-on:mouseout="mouseout($event, index)"
+          v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+          <div class="n-m-from n-flex">
+            <div class="n-avator-cont n-v-center">
+              <div v-if="item.isunseen">
+                <Badge dot>
+                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                </Badge>
+              </div>
+              <div v-else>
+                <Badge>
+                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                </Badge>
+              </div>
+            </div>
+            <div class="n-h-center n-align-v">
+              <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
+              <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
+            </div>
+          </div>
+          <div class="n-m-context">
+            <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.attributes.envelope.subject}}</div>
+            <div></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="n-html-cont n-overflow-h n-flex n-align-v">
+      <div class="n-frame-head">
+
+      </div>
+      <div class="n-frame-body">
+        <iframe onload="resizeHeight(this)" width="100%" marginheight="20" frameborder="0" scrolling="auto" v-bind:srcdoc="html"></iframe>
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
   import { isunseen } from '../lib/utils'
