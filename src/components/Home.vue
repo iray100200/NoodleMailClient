@@ -129,7 +129,7 @@
   import { isunseen } from '../lib/utils'
   import { mapState, mapActions, mapGetters } from 'vuex'
   import base from "../lib/base";
-  import Navigation from './Navigation';
+  import Navigation from './Navigation'
   export default {
     computed: {
       ...mapState({
