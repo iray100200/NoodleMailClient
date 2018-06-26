@@ -3,8 +3,9 @@
     height: 100%;
   }
   .n-list-cont {
-    padding: 6px 5px 6px 6px;
+    padding: 6px 3px 6px 6px;
     width: 360px;
+    background-color: #444693;
   }
   .mail-item {
     padding: 6px 12px;
@@ -12,26 +13,29 @@
     margin: 5px;
     display: inline-block;
     width: calc(100% - 10px);
-    background-image: linear-gradient(90deg, rgba(80, 96, 96, 0.3) 0%, rgba(0, 0, 0, 0) 50%, rgba(80, 96, 96, 0.3) 100%);
+    background-image: linear-gradient(90deg, rgba(100, 100, 100, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(100, 100, 100, 0.2) 100%);
     background-size: 200% 100%;
     background-position: 100% 0;
-    background-color: #f2f6f4;
-    transition: 0.6s background-color;
+    background-color: #444693;
+    transition: 0.6s background-color, box-shadow;
     will-change: background;
+    color: #eee;
   }
   .mail-item:hover {
     padding: 6px 12px;
     margin: 5px;
     display: inline-block;
     width: calc(100% - 10px);
-    background-color: #f6f5ec;
+    background-color: #336;
+    color: #fffffb;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   }
   .n-m-from {
     height: 44px;
     border-radius: 50%;
   }
   .n-from-name {
-    color: #130c0e;
+    color: inherit;
   }
   .n-m-context {
     flex: 1;
@@ -43,7 +47,7 @@
   }
   .n-date {
     font-size: 12px;
-    color: #999d9c;
+    color: #999c9c;
   }
   .n-seen {
     font-weight: 400;
@@ -56,11 +60,15 @@
   }
   .n-frame-head {
     height: 84px;
+    padding: 30px;
   }
   .n-frame-body {
     flex: 1;
     overflow: auto;
-    padding: 20px 0 10px 0;
+    padding: 30px 0 20px 0;
+  }
+  .n-avatar {
+    margin-right: 4px;
   }
 </style>
 <template>
@@ -101,7 +109,14 @@
     </div>
     <div class="n-html-cont n-overflow-h n-flex n-align-v">
       <div class="n-frame-head">
-
+        <div v-if="currentItem">
+          <div class="n-v-center">
+            <span class="n-avatar"><Avatar shape="square" style="background-color: #87d068" icon="person" />&nbsp</span>
+            <div>
+              <h2>{{currentItem.attributes.envelope.subject}}</h2>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="n-frame-body">
         <iframe onload="resizeHeight(this)" width="100%" marginheight="20" frameborder="0" scrolling="auto" v-bind:srcdoc="html"></iframe>
@@ -134,6 +149,7 @@
       retrieveHtml(item) {
         item.body.text ? this.html = item.body.text : ''
         if (item.isunseen) this.markSeen(item)
+        this.currentItem = item
       },
       mousemove(e, index) {
         this.currentSelected = index
@@ -156,7 +172,8 @@
         html: '',
         currentSelected: -1,
         positionX: '100%',
-        start: 0
+        start: 0,
+        currentItem: null
       }
     },
     mounted() {

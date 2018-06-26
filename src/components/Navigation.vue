@@ -18,7 +18,7 @@
 .n-navigation {
   width: 48px;
   height: 100%;
-  background: #2b85e4;
+  background: #333582;
 }
 .n-logo-cont {
   height: 48px;
