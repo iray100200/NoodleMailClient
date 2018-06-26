@@ -7,12 +7,14 @@
     width: 360px;
     background-color: #444693;
   }
+  .mail-item-cont {
+    margin: 5px;
+    display: block;
+    border-radius: 4px;
+    overflow: hidden;
+  }
   .mail-item {
     padding: 6px 12px;
-    border-radius: 4px;
-    margin: 5px;
-    display: inline-block;
-    width: calc(100% - 10px);
     background-image: linear-gradient(90deg, rgba(100, 100, 100, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(100, 100, 100, 0.2) 100%);
     background-size: 200% 100%;
     background-position: 100% 0;
@@ -22,13 +24,18 @@
     color: #eee;
   }
   .mail-item:hover {
-    padding: 6px 12px;
-    margin: 5px;
-    display: inline-block;
-    width: calc(100% - 10px);
-    background-color: #336;
+    background-color: #337;
     color: #fffffb;
     box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
+  .mail-head {
+    background-color: #585eaa;
+    height: 30px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    background-image: linear-gradient(90deg, rgba(100, 100, 100, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(100, 100, 100, 0.2) 100%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
   }
   .n-m-from {
     height: 44px;
@@ -76,33 +83,32 @@
     <Navigation v-on:inbox="getInbox()"></Navigation>
     <div class="n-overflow-y n-list-cont">
       <ul>
-        <li class="mail-item n-flex" 
-          v-for="(item, index) in map(mails)"
-          v-on:click="retrieveHtml(item)"
-          v-on:mousemove="mousemove($event, index)"
-          v-on:mouseout="mouseout($event, index)"
-          v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
-          <div class="n-m-from n-flex">
-            <div class="n-avator-cont n-v-center">
-              <div v-if="item.isunseen">
-                <Badge dot>
-                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                </Badge>
-              </div>
-              <div v-else>
-                <Badge>
-                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                </Badge>
-              </div>
-            </div>
-            <div class="n-h-center n-align-v">
-              <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
-              <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
-            </div>
+        <li class="mail-item-cont" v-for="(item, index) in map(mails)" v-on:click="retrieveHtml(item)" v-on:mousemove="mousemove($event, index)" v-on:mouseout="mouseout($event, index)">
+          <div v-if="item.isunseen" class="mail-head" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+          
           </div>
-          <div class="n-m-context">
-            <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.attributes.envelope.subject}}</div>
-            <div></div>
+          <div class="mail-item" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+            <div class="n-m-from n-flex">
+              <div class="n-avator-cont n-v-center">
+                <div v-if="item.isunseen">
+                  <Badge dot>
+                    <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                  </Badge>
+                </div>
+                <div v-else>
+                  <Badge>
+                    <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                  </Badge>
+                </div>
+              </div>
+              <div class="n-h-center n-align-v">
+                <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
+                <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
+              </div>
+            </div>
+            <div class="n-m-context">
+              <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.attributes.envelope.subject}}</div>
+            </div>
           </div>
         </li>
       </ul>
@@ -126,8 +132,14 @@
 </template>
 
 <script>
-  import { isunseen } from '../lib/utils'
-  import { mapState, mapActions, mapGetters } from 'vuex'
+  import {
+    isunseen
+  } from '../lib/utils'
+  import {
+    mapState,
+    mapActions,
+    mapGetters
+  } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation'
   export default {
@@ -179,11 +191,7 @@
     mounted() {
       this.fetchMailListAsync()
     },
-    updated() {
-      
-    },
-    beforeUpdate() {
-      
-    }
+    updated() {},
+    beforeUpdate() {}
   }
 </script>
