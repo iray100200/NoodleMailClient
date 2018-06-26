@@ -13,6 +13,9 @@
     border-radius: 4px;
     overflow: hidden;
   }
+  .mail-item-cont:hover {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  }
   .mail-item {
     padding: 6px 12px;
     background-image: linear-gradient(90deg, rgba(100, 100, 100, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(100, 100, 100, 0.2) 100%);
@@ -26,7 +29,6 @@
   .mail-item:hover {
     background-color: #337;
     color: #fffffb;
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   }
   .mail-head {
     background-color: #585eaa;
