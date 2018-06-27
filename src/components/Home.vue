@@ -66,9 +66,15 @@
   .n-seen {
     font-weight: 400;
   }
-  .n-unseen {
+  .n-unseen .n-from-name {
     font-weight: 600;
     color: #7bbfea;
+  }
+  .n-unseen .n-date {
+    color: #7bbfea;
+  }
+  .n-unseen .n-m-context {
+    font-weight: bold;
   }
   .n-html-cont {
     flex: 1;
@@ -96,8 +102,8 @@
             <Icon type="ios-clock-outline" size="14.5"></Icon>
             <label class="mail-head-date">今天</label>
           </div>
-          <div class="mail-item" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
-            <div class="n-m-from n-flex" v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">
+          <div class="mail-item" v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+            <div class="n-m-from n-flex">
               <div class="n-avator-cont n-v-center">
                 <div v-if="item.isunseen">
                   <Badge dot>
