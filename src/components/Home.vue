@@ -82,11 +82,21 @@
   .n-frame-head {
     padding: 30px 30px 20px;
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 10;
   }
   .n-frame-body {
     flex: 1;
     overflow: auto;
     padding: 30px 0 20px 0;
+  }
+  .n-html-cont ::-webkit-scrollbar {
+    width: 4px;
+    background: #eee;
+  }
+  .n-html-cont ::-webkit-scrollbar-thumb {
+    background: #808080;
+    border-radius: 2px;
   }
   .n-avatar {
     margin-right: 4px;
