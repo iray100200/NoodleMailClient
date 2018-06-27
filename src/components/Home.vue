@@ -8,7 +8,7 @@
     background-color: #444693;
   }
   .mail-item-cont {
-    margin: 5px;
+    margin: 8px 4px;
     display: block;
     border-radius: 4px;
     overflow: hidden;
@@ -26,11 +26,16 @@
     will-change: background;
     color: #eee;
   }
+  .mail-head-date {
+    margin-left: 4px;
+  }
   .mail-item:hover {
     background-color: #337;
     color: #fffffb;
   }
   .mail-head {
+    color: #afb4db;
+    padding: 0 12px;
     background-color: #585eaa;
     height: 30px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
@@ -63,6 +68,7 @@
   }
   .n-unseen {
     font-weight: 600;
+    color: #7bbfea;
   }
   .n-html-cont {
     flex: 1;
@@ -86,11 +92,12 @@
     <div class="n-overflow-y n-list-cont">
       <ul>
         <li class="mail-item-cont" v-for="(item, index) in map(mails)" v-on:click="retrieveHtml(item)" v-on:mousemove="mousemove($event, index)" v-on:mouseout="mouseout($event, index)">
-          <div v-if="item.isunseen" class="mail-head" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
-          
+          <div v-if="item.isunseen" class="mail-head n-flex n-v-center" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+            <Icon type="ios-clock-outline" size="14.5"></Icon>
+            <label class="mail-head-date">今天</label>
           </div>
           <div class="mail-item" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
-            <div class="n-m-from n-flex">
+            <div class="n-m-from n-flex" v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">
               <div class="n-avator-cont n-v-center">
                 <div v-if="item.isunseen">
                   <Badge dot>
@@ -109,7 +116,7 @@
               </div>
             </div>
             <div class="n-m-context">
-              <div v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'">{{item.attributes.envelope.subject}}</div>
+              <div>{{item.attributes.envelope.subject}}</div>
             </div>
           </div>
         </li>
