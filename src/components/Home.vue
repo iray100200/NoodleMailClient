@@ -80,8 +80,8 @@
     flex: 1;
   }
   .n-frame-head {
-    height: 84px;
-    padding: 30px;
+    padding: 30px 30px 20px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
   }
   .n-frame-body {
     flex: 1;
@@ -90,6 +90,15 @@
   }
   .n-avatar {
     margin-right: 4px;
+  }
+  .n-subject {
+    flex: 1;
+  }
+  .n-c-from {
+    margin-top: 10px;
+  }
+  .n-c-from > label {
+    margin-left: 6px;
   }
 </style>
 <template>
@@ -124,11 +133,14 @@
     <div class="n-html-cont n-overflow-h n-flex n-align-v">
       <div class="n-frame-head">
         <div v-if="currentItem">
-          <div class="n-v-center">
-            <span class="n-avatar"><Avatar shape="square" style="background-color: #87d068" icon="person" />&nbsp</span>
-            <div>
+          <div class="n-align-v">
+            <div class="n-subject">
               <h2>{{currentItem.attributes.envelope.subject}}</h2>
             </div>
+            <span class="n-c-from n-flex n-v-center">
+              <Avatar shape="square" style="background-color: #87d068" icon="person" />
+              <label>{{convertFromToNames(currentItem.attributes.envelope.from)}}</label>
+            </span>
           </div>
         </div>
       </div>
