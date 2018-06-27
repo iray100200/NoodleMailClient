@@ -105,16 +105,9 @@
           <div class="mail-item" v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
             <div class="n-m-from n-flex">
               <div class="n-avator-cont n-v-center">
-                <div v-if="item.isunseen">
-                  <Badge dot>
-                    <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                  </Badge>
-                </div>
-                <div v-else>
-                  <Badge>
-                    <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                  </Badge>
-                </div>
+                <Badge dot v-bind:count="item.isunseen ? 1 : 0">
+                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                </Badge>
               </div>
               <div class="n-h-center n-align-v">
                 <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
