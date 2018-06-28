@@ -119,7 +119,7 @@
         <li class="mail-item-cont" v-for="(item, index) in map(mails)" v-on:click="retrieveHtml(item)" v-on:mousemove="mousemove($event, index)" v-on:mouseout="mouseout($event, index)">
           <div v-if="item.isunseen" class="mail-head n-flex n-v-center" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
             <Icon type="ios-clock-outline" size="14.5"></Icon>
-            <label class="mail-head-date">今天</label>
+            <label class="mail-head-date">{{dateNormalize(item.attributes.envelope.date)}}</label>
           </div>
           <div class="mail-item" v-bind:class="item.isunseen ? 'n-unseen' : 'n-seen'" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
             <div class="n-m-from n-flex">
@@ -163,7 +163,7 @@
 
 <script>
   import {
-    isunseen
+    isunseen, dateNormalize
   } from '../lib/utils'
   import {
     mapState,
@@ -203,7 +203,8 @@
       },
       convertFromToNames(array) {
         return array.map(m => m.name).join(', ')
-      }
+      },
+      dateNormalize
     },
     components: {
       Navigation
