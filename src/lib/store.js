@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchDB, updateDB, fetchList, fetchDetails, markSeen } from './service'
+import { fetchDB, updateDB, login, fetchList, fetchDetails, markSeen } from './service'
 import { sort, isunseen } from './utils'
 import { stat } from 'fs';
 
@@ -47,21 +47,28 @@ const actions = {
     })()
   },
   fetchMailListAsync({ commit }) {
+    function commitFetch(uuid) {
+      return (list, statusCode) => {
+        return commit('fetch', {
+          data: sort(list, 'attributes.date', 'Date'),
+          uuid: uuid || null,
+          status: {
+            code: statusCode
+          }
+        })
+      }
+    }
     (async () => {
       try {
         let fetchDBResult = await fetchDB()
-        let fetchListResult = await fetchList()
+        let loginResult = await login()
         let addlist = [], removeList = [], mailList = []
-        if (fetchListResult.error && fetchDBResult.result) {
+        if (loginResult.error) {
           mailList = fetchDBResult.result.map(m => m.data)
-          return commit('fetch', {
-            data: sort(mailList, 'attributes.date', 'Date'),
-            uuid: null,
-            status: {
-              code: 'error'
-            }
-          })
+          return commitFetch()(mailList, 'error')
         }
+        let commitFetchLoginResult = commitFetch(loginResult.uuid)
+        let fetchListResult = await fetchList(loginResult.uuid)
         if (fetchDBResult.result && fetchDBResult.result.length > 0) {
           fetchDBResult.result.forEach(f => {
             if (!fetchListResult.result.some(s => {
@@ -82,7 +89,7 @@ const actions = {
         } else {
           addlist = fetchListResult.result
         }
-        let fetchDetailsResult = await fetchDetails(fetchListResult.uuid, addlist)
+        let fetchDetailsResult = await fetchDetails(loginResult.uuid, addlist)
         let transaction = fetchDBResult.db.transaction(['mails'], "readwrite")
         let store = transaction.objectStore('mails')
         for (var r in fetchDetailsResult.result) {
@@ -94,13 +101,7 @@ const actions = {
           })
         }
         removeList.forEach(a => store.delete(a))
-        commit('fetch', {
-          data: sort(mailList, 'attributes.date', 'Date'),
-          uuid: fetchListResult.uuid,
-          status: {
-            code: 'success'
-          }
-        })
+        commitFetchLoginResult(mailList, 'success')
       } catch (e) {
         console.log(e)
       }
