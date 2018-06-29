@@ -175,7 +175,8 @@
   export default {
     computed: {
       ...mapState({
-        mails: state => state.mailsys.mails.data
+        mails: state => state.mailsys.mails.data,
+        status: state => state.mailsys.status
       }),
       ...mapGetters({
         parse: 'mailsys/parse',
@@ -221,8 +222,18 @@
     },
     mounted() {
       this.fetchMailListAsync()
+      this.$store.subscribe((mutation, state) => {
+        if (mutation.type === 'mailsys/fetch' && state.mailsys.status.code === 'error') {
+          this.$Notice.error({
+            title: '状态提醒',
+            desc: '连接服务器失败，请稍后重新尝试！'
+          })
+        }
+      })
     },
-    updated() {},
+    updated() {
+      
+    },
     beforeUpdate() {}
   }
 </script>

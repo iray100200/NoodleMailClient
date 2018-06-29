@@ -50,8 +50,10 @@ export const fetchList = () => {
       'Content-Type': 'application/json'
     })
   })
-    .then(res => res.json())
-    .then(res => res.data)
+    .then(res => res.json().data)
+    .catch(err => {
+      return { error: err }
+    })
 }
 
 export const fetchDetails = (uuid, resultList) => {
@@ -65,8 +67,10 @@ export const fetchDetails = (uuid, resultList) => {
       uuid
     })
   })
-    .then(res => res.json())
-    .then(res => res.data)
+    .then(res => res.json().data)
+    .catch(err => {
+      return { error: err }
+    })
 }
 
 export const markSeen = (uuid, uid) => {
@@ -81,6 +85,8 @@ export const markSeen = (uuid, uid) => {
       uid
     })
   })
-    .then(res => res.json())
-    .then(res => res.data)
+    .then(res => res.json().data)
+    .catch(err => {
+      return { error: err }
+    })
 }

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { fetchDB, updateDB, fetchList, fetchDetails, markSeen } from './service'
 import { sort, isunseen } from './utils'
+import { stat } from 'fs';
 
 Vue.use(Vuex)
 
@@ -12,13 +13,18 @@ const state = {
     order: 'desc',
     orderBy: 'attributes.date'
   },
-  uuid: null
+  uuid: null,
+  status: {},
+  notification: {
+    opened: false
+  }
 }
 
 const mutations = {
   fetch(state, payload) {
     state.mails.data = payload.data
     state.uuid = payload.uuid
+    state.status = payload.status
   },
   markSeen(state, payload) {
     state.mails = { ...payload }
@@ -46,7 +52,17 @@ const actions = {
         let fetchDBResult = await fetchDB()
         let fetchListResult = await fetchList()
         let addlist = [], removeList = [], mailList = []
-        if (fetchDBResult.result.length > 0) {
+        if (fetchListResult.error && fetchDBResult.result) {
+          mailList = fetchDBResult.result.map(m => m.data)
+          return commit('fetch', {
+            data: sort(mailList, 'attributes.date', 'Date'),
+            uuid: null,
+            status: {
+              code: 'error'
+            }
+          })
+        }
+        if (fetchDBResult.result && fetchDBResult.result.length > 0) {
           fetchDBResult.result.forEach(f => {
             if (!fetchListResult.result.some(s => {
               return s === f.uid
@@ -80,7 +96,10 @@ const actions = {
         removeList.forEach(a => store.delete(a))
         commit('fetch', {
           data: sort(mailList, 'attributes.date', 'Date'),
-          uuid: fetchListResult.uuid
+          uuid: fetchListResult.uuid,
+          status: {
+            code: 'success'
+          }
         })
       } catch (e) {
         console.log(e)
