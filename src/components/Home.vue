@@ -99,10 +99,8 @@
       }
       ::-webkit-scrollbar-thumb {
         background: #808080;
-        border-radius: 2px;
       }
       .n-frame-head {
-        padding: 30px 30px 20px;
         box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
         position: relative;
         z-index: 10;
@@ -110,16 +108,30 @@
       .n-frame-body {
         flex: 1;
         overflow: auto;
-        padding: 30px 0 20px 0;
+        padding: 30px;
       }
       .n-subject {
         flex: 1;
+        padding: 24px 30px 16px;
+        background-color: #f6f5ec;
       }
       .n-c-from {
-        margin-top: 10px;
+        padding: 8px 30px 9px;
+        color: #ccf;
+        background-color: #444693;
       }
-      .n-c-from>label {
-        margin-left: 6px;
+      .n-c-from>p {
+        margin-top: 2px;
+      }
+      .n-infos {
+        margin-left: 8px;
+        font-size: 1.2em;
+      }
+      .n-tag {
+        margin: 0 4px;
+        font-size: 0.9em;
+        color: #999d9c;
+        font-size: 14px;
       }
     }
   }
@@ -145,7 +157,7 @@
                 </Badge>
               </div>
               <div class="n-h-center n-align-v">
-                <p class="n-from-name">{{convertFromToNames(item.attributes.envelope.from)}}</p>
+                <p class="n-from-name">{{convertObjectToNames(item.attributes.envelope.from)}}</p>
                 <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
               </div>
             </div>
@@ -163,15 +175,17 @@
             <div class="n-subject">
               <h2>{{currentItem.attributes.envelope.subject}}</h2>
             </div>
-            <span class="n-c-from n-flex n-v-center">
-                    <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                    <label>{{convertFromToNames(currentItem.attributes.envelope.from)}}</label>
-                  </span>
+            <div class="n-c-from" v-if="currentItem">
+              <p class="n-flex n-v-center">
+                <Avatar icon="person" size="small" />
+                <label class="n-infos">{{convertObjectToNames(currentItem.attributes.envelope.from)}} <span class="n-tag"><Icon type="ios-arrow-thin-right"></Icon></span> {{convertObjectToNames(currentItem.attributes.envelope.to)}} &nbsp;<Icon type="ios-more"></Icon></label>
+              </p>
+            </div>
           </div>
         </div>
       </div>
       <div class="n-frame-body">
-        <iframe onload="resizeHeight(this)" width="100%" marginheight="20" frameborder="0" scrolling="auto" v-bind:srcdoc="html"></iframe>
+        <iframe onload="resizeHeight(this)" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html"></iframe>
       </div>
     </div>
   </div>
@@ -222,8 +236,8 @@
       mouseout(e, index) {
         this.currentSelected = -1
       },
-      convertFromToNames(array) {
-        return array.map(m => m.name).join(', ')
+      convertObjectToNames(array) {
+        return array.map(m => m.name || m.mailbox).join('; ')
       },
       dateNormalize
     },
