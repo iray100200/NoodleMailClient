@@ -21,7 +21,7 @@ export const sort = (data, key, type) => {
 }
 
 export const isunseen = (item) => {
-  return item.attributes.flags.indexOf('\\Seen') < 0
+  return typeof item === "object" && item.attributes.flags.indexOf('\\Seen') < 0
 }
 
 export const dateNormalize = (date) => {

@@ -116,7 +116,7 @@ const getters = {
   sort: () => sort,
   map: () => (data) => {
     return data.map(m => {
-      m.isunseen = isunseen(m)
+      if (!!m) m.isunseen = isunseen(m)
       return m
     })
   }

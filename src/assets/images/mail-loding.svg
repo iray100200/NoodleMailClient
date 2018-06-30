@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="no"?>
+
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="100%" viewBox="0 0 340 100" height="100%" version="1.1"
+xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+  <linearGradient id="linear1" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:rgba(255, 255, 255, 0.1);"/>
+    <stop offset="25%" style="stop-color:rgba(255, 255, 255, 0.3);"/>
+    <stop offset="50%" style="stop-color:rgba(255, 255, 255, 0.1);"/>
+    <stop offset="75%" style="stop-color:rgba(255, 255, 255, 0.3);"/>
+    <stop offset="100%" style="stop-color:rgba(255, 255, 255, 0.1);"/>
+  </linearGradient>
+</defs>
+
+<defs>
+  <clipPath id="cp1">
+    <rect rx="4" ry="4" width="32" height="32" x="12" y="12"/>
+    <rect rx="4" ry="4" width="100" height="8" x="56" y="14"/>
+    <rect rx="4" ry="4" width="100" height="8" x="56" y="34"/>
+    <rect rx="4" ry="4" width="316" height="8" x="12" y="60"/>
+  </clipPath>
+</defs>
+
+<g style="clip-path: url(#cp1);">
+  <rect fill="rgba(255, 255, 255, 0.1)" width="340px" height="100px" rx="4" ry="4"></rect>
+  <rect style="fill: url(#linear1)" width="680px" height="100px" rx="4" ry="4">
+    <animate id="animation1"
+      attributeName="x"
+      from="-340"
+      to="0"
+      dur="1s"
+      repeatCount="indefinite"/>
+  </rect>
+</g>
+</svg>
