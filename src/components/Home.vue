@@ -93,11 +93,11 @@
     }
     .n-html-cont {
       flex: 1;
-      ::-webkit-scrollbar {
+       ::-webkit-scrollbar {
         width: 4px;
         background: #eee;
       }
-      ::-webkit-scrollbar-thumb {
+       ::-webkit-scrollbar-thumb {
         background: #808080;
       }
       .n-frame-head {
@@ -131,7 +131,7 @@
       .n-frame-body {
         flex: 1;
         overflow: auto;
-        padding: 36px;
+        padding: 20px 36px;
       }
     }
   }
@@ -179,15 +179,15 @@
               <p class="n-flex n-v-center">
                 <Avatar icon="person" size="small" />
                 <label class="n-infos n-flex-inline">
-                  <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.from)}}</span>
-                  <span class="n-tag">to</span>
-                  <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.to.slice(0, 2))}}</span>
-                  <span class="n-clickable n-v-center">
-                    <Poptip trigger="hover" v-bind:content="convertContactListToAddresses(currentItem.attributes.envelope.to)">
-                      <Icon class="n-icon" type="ios-more-outline"></Icon>
-                    </Poptip>
-                  </span>
-                </label>
+                    <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.from)}}</span>
+                    <span class="n-tag">to</span>
+                    <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.to.slice(0, 2))}}</span>
+                    <span class="n-clickable n-v-center">
+                      <Poptip trigger="hover" v-bind:content="convertContactListToAddresses(currentItem.attributes.envelope.to)">
+                        <Icon class="n-icon" type="ios-more-outline"></Icon>
+                      </Poptip>
+                    </span>
+                  </label>
               </p>
             </div>
           </div>
@@ -233,7 +233,11 @@
         'markSeen'
       ]),
       retrieveHtml(item) {
-        item.body.text ? this.html = item.body.text : ''
+        if (item.body instanceof Array) {
+          this.html = item.body.find(f => f.struct.subtype === 'html').text
+        } else {
+          item.body.text ? this.html = item.body.text : ''
+        }
         if (item.isunseen) this.markSeen(item)
         this.currentItem = item
       },
