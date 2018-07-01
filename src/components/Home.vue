@@ -7,21 +7,34 @@
       background-color: #444693;
     }
     .mail-item-cont {
+      position: relative;
       &.active:not(.selected) {
         &:hover {
           box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
         .n-date {
-          transition: 0.5s color;
           font-size: 12px;
-          color: #a1a3a6;
+          color: #b1b3b6;
         }
         .mail-item:hover {
           background-color: rgba(0, 0, 70, 0.3);
           color: #fffffb;
-          .n-date {
+          not(.n-unseen) .n-date {
             color: #d3d7d4;
           }
+        }
+        .n-seen {
+          font-weight: 400;
+        }
+        .n-unseen .n-from-name {
+          font-weight: 600;
+          color: #7bbfea;
+        }
+        .n-unseen .n-date {
+          color: #7bbfea;
+        }
+        .n-unseen .n-m-context {
+          font-weight: bold;
         }
       }
       &.selected {
@@ -43,7 +56,7 @@
         background-color: #444693;
         transition: 0.6s background-color, box-shadow;
         will-change: background;
-        color: #eee;
+        color: #fcfcff;
       }
       .mail-head-date {
         margin-left: 4px;
@@ -57,7 +70,7 @@
         position: relative;
       }
       .mail-item-bg {
-        background-image: linear-gradient(90deg, rgba(140, 140, 140, 0.2) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(140, 140, 140, 0.2) 100%);
+        background-image: linear-gradient(90deg, rgba(180, 180, 180, 0.1) 0%, rgba(255, 255, 255, 0.15) 25%, rgba(255, 255, 255, 0.24) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(180, 180, 180, 0.1) 100%);
         background-size: 200% 100%;
         background-position: 100% 0;
       }
@@ -88,19 +101,6 @@
     }
     .n-avator-cont {
       width: 44px;
-    }
-    .n-seen {
-      font-weight: 400;
-    }
-    .n-unseen .n-from-name {
-      font-weight: 600;
-      color: #7bbfea;
-    }
-    .n-unseen .n-date {
-      color: #7bbfea;
-    }
-    .n-unseen .n-m-context {
-      font-weight: bold;
     }
     .n-html-cont {
       position: relative;
@@ -161,16 +161,13 @@
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
-        <li class="mail-item-cont active"
-          v-for="(item, index) in map(mails)"
-          v-bind:class="{ 'selected' : index === currentIndex }" v-on:click="retrieveHtml(item, index)"
-          v-on:mousemove="mousemove($event, index)"
-          v-on:mouseout="mouseout($event, index)">
-          <div v-if="!!item && item.isunseen" class="mail-head mail-item-bg n-flex n-v-center" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+        <li class="mail-item-cont active" v-for="(item, index) in map(mails)" v-bind:class="{ 'selected' : index === selectedIndex }" v-on:click="retrieveHtml(item, index)" v-on:mouseenter="mouseenter($event, index)" v-on:mousemove="mousemove($event, index)"
+          v-on:mouseleave="mouseleave($event, index)">
+          <div class="mail-head mail-item-bg n-flex n-v-center" v-if="!!item && item.isunseen" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
             <Icon type="ios-clock-outline" size="14.5"></Icon>
             <label class="mail-head-date">{{dateNormalize(item.attributes.envelope.date)}}</label>
           </div>
-          <div class="mail-item mail-item-bg" v-bind:class="[item.isunseen ? 'n-unseen' : 'n-seen']" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+          <div class="mail-item mail-item-bg" v-bind:class="[item.isunseen ? 'n-unseen' : 'n-seen']" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
             <div class="n-m-from n-flex" v-if="!!item">
               <div class="n-avator-cont n-v-center">
                 <Badge dot v-bind:count="item.isunseen ? 1 : 0">
@@ -201,15 +198,15 @@
               <p class="n-flex n-v-center">
                 <Avatar icon="person" size="small" />
                 <label class="n-infos n-flex-inline">
-                    <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.from)}}</span>
-                    <span class="n-tag">to</span>
-                    <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.to.slice(0, 2))}}</span>
-                    <span class="n-clickable n-v-center">
-                      <Poptip trigger="hover" v-bind:content="convertContactListToAddresses(currentItem.attributes.envelope.to)">
-                        <Icon class="n-icon" type="ios-more-outline"></Icon>
-                      </Poptip>
-                    </span>
-                  </label>
+                      <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.from)}}</span>
+                      <span class="n-tag">to</span>
+                      <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.to.slice(0, 2))}}</span>
+                      <span class="n-clickable n-v-center">
+                        <Poptip trigger="hover" v-bind:content="convertContactListToAddresses(currentItem.attributes.envelope.to)">
+                          <Icon class="n-icon" type="ios-more-outline"></Icon>
+                        </Poptip>
+                      </span>
+                    </label>
               </p>
             </div>
           </div>
@@ -246,7 +243,9 @@
       ...mapState({
         mails: state => state.mailsys.mails.data,
         status: state => state.mailsys.status,
-        isLoading: state => state.mailsys.isLoading
+        isLoading: state => state.mailsys.isLoading,
+        hoveredIndex: state => state.mailsys.hoveredIndex,
+        selectedIndex: state => state.mailsys.selectedIndex
       }),
       ...mapGetters({
         parse: 'mailsys/parse',
@@ -258,7 +257,9 @@
       ...mapActions('mailsys', [
         'fetchMailListAsync',
         'markSeen',
-        'setFrame'
+        'setFrame',
+        'setHoveredIndex',
+        'setSelectedIndex'
       ]),
       retrieveHtml(item, index) {
         if (!this.currentItem || item.attributes.uid !== this.currentItem.attributes.uid) {
@@ -270,22 +271,29 @@
           }
           if (item.isunseen) this.markSeen(item)
           this.currentItem = item
-          this.currentIndex = index
+          this.setSelectedIndex(index)
+          this.scrollFrame2Top()
         }
       },
-      mousemove(e, index) {
-        this.currentSelected = index
-        let w = e.currentTarget.offsetWidth
-        this.positionX = ((w - e.offsetX) / w * 100) + '%'
+      mouseenter(e, index) {
+        this.setHoveredIndex(index)
       },
-      mouseout(e, index) {
-        this.currentSelected = -1
+      mouseleave(e, index) {
+        this.setHoveredIndex(-1)
+      },
+      mousemove(e, index) {
+        let w = e.currentTarget.offsetWidth
+        this.positionX = ((w - e.layerX) / w * 100) + '%'
+        console.log(w, e.layerX, this.positionX)
       },
       frameLoad(e) {
         let obj = e.target
         obj.height = obj.contentDocument.body.scrollHeight + 'px'
         obj.width = obj.contentDocument.body.scrollWidth + 'px'
         this.$Loading.finish()
+      },
+      scrollFrame2Top() {
+        document.querySelector('.n-frame-body').scrollTop = 0
       },
       convertContactListToNames(array) {
         return array.map(m => m.name || m.mailbox).join('; ')
@@ -299,10 +307,8 @@
     data() {
       return {
         html: '',
-        currentSelected: -1,
         positionX: '100%',
         start: 0,
-        currentIndex: -1,
         currentItem: null,
         mailTemps: Array.apply(this, {
           length: parseInt(document.documentElement.clientHeight / 80)

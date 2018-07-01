@@ -13,6 +13,8 @@ const state = {
     order: 'desc',
     orderBy: 'attributes.date'
   },
+  hoveredIndex: -1,
+  selectedIndex: -1,
   uuid: null,
   status: {},
   isLoading: false
@@ -29,6 +31,13 @@ const mutations = {
   },
   setFrame(state, payload) {
     state.isLoading = payload.isLoading
+  },
+  setHoveredIndex(state, payload) {
+    console.log(payload)
+    state.hoveredIndex = payload
+  },
+  setSelectedIndex(state, payload) {
+    state.selectedIndex = payload
   }
 }
 
@@ -49,6 +58,12 @@ const actions = {
   },
   setFrame({ commit }, value) {
     commit('setFrame', value)
+  },
+  setHoveredIndex({ commit }, value) {
+    commit('setHoveredIndex', value)
+  },
+  setSelectedIndex({ commit }, value) {
+    commit('setSelectedIndex', value)
   },
   fetchMailListAsync({ commit }) {
     function commitFetch(uuid) {
