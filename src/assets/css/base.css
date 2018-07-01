@@ -89,6 +89,9 @@ li {
 .n-flex {
   display: flex;
 }
+.n-flex-inline {
+  display: inline-flex;
+}
 .n-vh-center {
   display: flex;
   align-items: center;
@@ -119,4 +122,26 @@ li {
 }
 .n-overflow-h {
   overflow: hidden;
+}
+.n-icon {
+  font-size: 16px;
+}
+.n-link {
+  cursor: pointer;
+}
+.n-clickable {
+  padding: 0 6px;
+  border-radius: 4px;
+  transition: 0.3s color;
+}
+.n-hoverable:hover {
+  color: #fffffb;
+}
+.n-clickable {
+  padding: 0 6px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.n-clickable:hover {
+  color: #fffffb;
 }

@@ -105,18 +105,13 @@
         position: relative;
         z-index: 10;
       }
-      .n-frame-body {
-        flex: 1;
-        overflow: auto;
-        padding: 30px;
-      }
       .n-subject {
         flex: 1;
-        padding: 24px 30px 16px;
+        padding: 24px 36px 16px;
         background-color: #f6f5ec;
       }
       .n-c-from {
-        padding: 8px 30px 9px;
+        padding: 8px 36px 9px;
         color: #ccf;
         background-color: #444693;
       }
@@ -128,10 +123,15 @@
         font-size: 1.2em;
       }
       .n-tag {
-        margin: 0 4px;
+        padding: 0 8px;
         font-size: 0.9em;
-        color: #999d9c;
+        color: #999ddc;
         font-size: 14px;
+      }
+      .n-frame-body {
+        flex: 1;
+        overflow: auto;
+        padding: 36px;
       }
     }
   }
@@ -157,7 +157,7 @@
                 </Badge>
               </div>
               <div class="n-h-center n-align-v">
-                <p class="n-from-name">{{convertObjectToNames(item.attributes.envelope.from)}}</p>
+                <p class="n-from-name">{{convertContactListToNames(item.attributes.envelope.from)}}</p>
                 <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
               </div>
             </div>
@@ -178,7 +178,16 @@
             <div class="n-c-from" v-if="currentItem">
               <p class="n-flex n-v-center">
                 <Avatar icon="person" size="small" />
-                <label class="n-infos">{{convertObjectToNames(currentItem.attributes.envelope.from)}} <span class="n-tag"><Icon type="ios-arrow-thin-right"></Icon></span> {{convertObjectToNames(currentItem.attributes.envelope.to)}} &nbsp;<Icon type="ios-more"></Icon></label>
+                <label class="n-infos n-flex-inline">
+                  <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.from)}}</span>
+                  <span class="n-tag">to</span>
+                  <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.to.slice(0, 2))}}</span>
+                  <span class="n-clickable n-v-center">
+                    <Poptip trigger="hover" v-bind:content="convertContactListToAddresses(currentItem.attributes.envelope.to)">
+                      <Icon class="n-icon" type="ios-more-outline"></Icon>
+                    </Poptip>
+                  </span>
+                </label>
               </p>
             </div>
           </div>
@@ -236,8 +245,11 @@
       mouseout(e, index) {
         this.currentSelected = -1
       },
-      convertObjectToNames(array) {
+      convertContactListToNames(array) {
         return array.map(m => m.name || m.mailbox).join('; ')
+      },
+      convertContactListToAddresses(array) {
+        return array.map(m => `${m.mailbox}@${m.host}`).join('; ')
       },
       dateNormalize
     },
