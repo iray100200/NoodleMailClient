@@ -15,9 +15,7 @@ const state = {
   },
   uuid: null,
   status: {},
-  notification: {
-    opened: false
-  }
+  isLoading: false
 }
 
 const mutations = {
@@ -28,6 +26,9 @@ const mutations = {
   },
   markSeen(state, payload) {
     state.mails = { ...payload }
+  },
+  setFrame(state, payload) {
+    state.isLoading = payload.isLoading
   }
 }
 
@@ -45,6 +46,9 @@ const actions = {
       commit('markSeen', state.mails)
       await markSeen(state.uuid, uid)
     })()
+  },
+  setFrame({ commit }, value) {
+    commit('setFrame', value)
   },
   fetchMailListAsync({ commit }) {
     function commitFetch(uuid) {

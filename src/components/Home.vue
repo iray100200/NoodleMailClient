@@ -92,6 +92,7 @@
       font-weight: bold;
     }
     .n-html-cont {
+      position: relative;
       flex: 1;
        ::-webkit-scrollbar {
         width: 4px;
@@ -128,10 +129,15 @@
         color: #999ddc;
         font-size: 14px;
       }
-      .n-frame-body {
+      .n-frame-container {
         flex: 1;
+        position: relative;
+      }
+      .n-frame-body {
         overflow: auto;
-        padding: 20px 36px;
+        padding: 28px 36px;
+        width: 100%;
+        height: 100%;
       }
     }
   }
@@ -169,6 +175,7 @@
       </ul>
     </div>
     <div class="n-html-cont n-overflow-h n-flex n-align-v">
+      <NMask v-bind:isLoading="isLoading"></NMask>
       <div class="n-frame-head">
         <div v-if="currentItem">
           <div class="n-align-v">
@@ -193,8 +200,10 @@
           </div>
         </div>
       </div>
-      <div class="n-frame-body">
-        <iframe onload="resizeHeight(this)" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html"></iframe>
+      <div class="n-frame-container n-flex">
+        <div class="n-frame-body">
+          <iframe v-on:load="frameLoad" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html"></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -212,14 +221,17 @@
   } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation'
+  import NMask from './shared/Mask'
   export default {
     components: {
-      Navigation
+      Navigation,
+      NMask
     },
     computed: {
       ...mapState({
         mails: state => state.mailsys.mails.data,
-        status: state => state.mailsys.status
+        status: state => state.mailsys.status,
+        isLoading: state => state.mailsys.isLoading
       }),
       ...mapGetters({
         parse: 'mailsys/parse',
@@ -230,16 +242,26 @@
     methods: {
       ...mapActions('mailsys', [
         'fetchMailListAsync',
-        'markSeen'
+        'markSeen',
+        'setFrame'
       ]),
       retrieveHtml(item) {
-        if (item.body instanceof Array) {
-          this.html = item.body.find(f => f.struct.subtype === 'html').text
-        } else {
-          item.body.text ? this.html = item.body.text : ''
+        if (!this.currentItem || item.attributes.uid !== this.currentItem.attributes.uid) {
+          this.hideMask()
+          if (item.body instanceof Array) {
+            this.html = item.body.find(f => f.struct.subtype === 'html').text
+          } else {
+            item.body.text ? this.html = item.body.text : ''
+          }
+          if (item.isunseen) this.markSeen(item)
+          this.currentItem = item
         }
-        if (item.isunseen) this.markSeen(item)
-        this.currentItem = item
+      },
+      showMask() {
+        this.setFrame({ isLoading: false })
+      },
+      hideMask() {
+        this.setFrame({ isLoading: true })
       },
       mousemove(e, index) {
         this.currentSelected = index
@@ -248,6 +270,12 @@
       },
       mouseout(e, index) {
         this.currentSelected = -1
+      },
+      frameLoad(e) {
+        let obj = e.target
+        obj.height = obj.contentDocument.body.scrollHeight + 'px'
+        obj.width = obj.contentDocument.body.scrollWidth + 'px'
+        this.showMask()
       },
       convertContactListToNames(array) {
         return array.map(m => m.name || m.mailbox).join('; ')
