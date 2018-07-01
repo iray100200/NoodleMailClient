@@ -30,8 +30,8 @@
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
-  background: #444693;
+  width: 3px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {

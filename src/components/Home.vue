@@ -7,13 +7,31 @@
       background-color: #444693;
     }
     .mail-item-cont {
-      &.active {
+      &.active:not(.selected) {
         &:hover {
           box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
+        .n-date {
+          transition: 0.5s color;
+          font-size: 12px;
+          color: #a1a3a6;
+        }
         .mail-item:hover {
-          background-color: #337;
+          background-color: rgba(0, 0, 70, 0.3);
           color: #fffffb;
+          .n-date {
+            color: #d3d7d4;
+          }
+        }
+      }
+      &.selected {
+        .mail-item {
+          background-color: #afb4db;
+          color: #130c0e;
+          background-position: 0!important;
+        }
+        .n-date {
+          color: #3e4145;
         }
       }
       margin: 8px 4px;
@@ -37,12 +55,9 @@
         height: 30px;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
         position: relative;
-        background-image: linear-gradient(90deg, rgba(100, 100, 100, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(100, 100, 100, 0.2) 100%);
-        background-size: 200% 100%;
-        background-position: 100% 0;
       }
       .mail-item-bg {
-        background-image: linear-gradient(90deg, rgba(100, 100, 100, 0.2) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(100, 100, 100, 0.2) 100%);
+        background-image: linear-gradient(90deg, rgba(140, 140, 140, 0.2) 0%, rgba(255, 255, 255, 0.28) 50%, rgba(140, 140, 140, 0.2) 100%);
         background-size: 200% 100%;
         background-position: 100% 0;
       }
@@ -73,10 +88,6 @@
     }
     .n-avator-cont {
       width: 44px;
-    }
-    .n-date {
-      font-size: 12px;
-      color: #999c9c;
     }
     .n-seen {
       font-weight: 400;
@@ -150,8 +161,12 @@
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
-        <li class="mail-item-cont active" v-for="(item, index) in map(mails)" v-on:click="retrieveHtml(item)" v-on:mousemove="mousemove($event, index)" v-on:mouseout="mouseout($event, index)">
-          <div v-if="!!item && item.isunseen" class="mail-head n-flex n-v-center" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
+        <li class="mail-item-cont active"
+          v-for="(item, index) in map(mails)"
+          v-bind:class="{ 'selected' : index === currentIndex }" v-on:click="retrieveHtml(item, index)"
+          v-on:mousemove="mousemove($event, index)"
+          v-on:mouseout="mouseout($event, index)">
+          <div v-if="!!item && item.isunseen" class="mail-head mail-item-bg n-flex n-v-center" v-bind:style="{ backgroundPositionX: currentSelected === index ? positionX : start }">
             <Icon type="ios-clock-outline" size="14.5"></Icon>
             <label class="mail-head-date">{{dateNormalize(item.attributes.envelope.date)}}</label>
           </div>
@@ -245,9 +260,9 @@
         'markSeen',
         'setFrame'
       ]),
-      retrieveHtml(item) {
+      retrieveHtml(item, index) {
         if (!this.currentItem || item.attributes.uid !== this.currentItem.attributes.uid) {
-          this.hideMask()
+          this.$Loading.start()
           if (item.body instanceof Array) {
             this.html = item.body.find(f => f.struct.subtype === 'html').text
           } else {
@@ -255,13 +270,8 @@
           }
           if (item.isunseen) this.markSeen(item)
           this.currentItem = item
+          this.currentIndex = index
         }
-      },
-      showMask() {
-        this.setFrame({ isLoading: false })
-      },
-      hideMask() {
-        this.setFrame({ isLoading: true })
       },
       mousemove(e, index) {
         this.currentSelected = index
@@ -275,7 +285,7 @@
         let obj = e.target
         obj.height = obj.contentDocument.body.scrollHeight + 'px'
         obj.width = obj.contentDocument.body.scrollWidth + 'px'
-        this.showMask()
+        this.$Loading.finish()
       },
       convertContactListToNames(array) {
         return array.map(m => m.name || m.mailbox).join('; ')
@@ -292,6 +302,7 @@
         currentSelected: -1,
         positionX: '100%',
         start: 0,
+        currentIndex: -1,
         currentItem: null,
         mailTemps: Array.apply(this, {
           length: parseInt(document.documentElement.clientHeight / 80)
