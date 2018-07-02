@@ -102,55 +102,6 @@
     .n-avator-cont {
       width: 44px;
     }
-    .n-html-cont {
-      position: relative;
-      flex: 1;
-       ::-webkit-scrollbar {
-        width: 4px;
-        background: #eee;
-      }
-       ::-webkit-scrollbar-thumb {
-        background: #808080;
-      }
-      .n-frame-head {
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
-        position: relative;
-        z-index: 10;
-      }
-      .n-subject {
-        flex: 1;
-        padding: 24px 36px 16px;
-        background-color: #f6f5ec;
-      }
-      .n-c-from {
-        padding: 8px 36px 9px;
-        color: #ccf;
-        background-color: #444693;
-      }
-      .n-c-from>p {
-        margin-top: 2px;
-      }
-      .n-infos {
-        margin-left: 8px;
-        font-size: 1.2em;
-      }
-      .n-tag {
-        padding: 0 8px;
-        font-size: 0.9em;
-        color: #999ddc;
-        font-size: 14px;
-      }
-      .n-frame-container {
-        flex: 1;
-        position: relative;
-      }
-      .n-frame-body {
-        overflow: auto;
-        padding: 28px 36px;
-        width: 100%;
-        height: 100%;
-      }
-    }
   }
 </style>
 <template>
@@ -161,7 +112,12 @@
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
-        <li class="mail-item-cont active" v-for="(item, index) in map(mails)" v-bind:class="{ 'selected' : index === selectedIndex }" v-on:click="retrieveHtml(item, index)" v-on:mouseenter="mouseenter($event, index)" v-on:mousemove="mousemove($event, index)"
+        <li class="mail-item-cont active" 
+          v-for="(item, index) in map(mails)" 
+          v-bind:class="{ 'selected' : index === selectedIndex }" 
+          v-on:click="route(item)" 
+          v-on:mouseenter="mouseenter($event, index)" 
+          v-on:mousemove="mousemove($event, index)"
           v-on:mouseleave="mouseleave($event, index)">
           <div class="mail-head mail-item-bg n-flex n-v-center" v-if="!!item && item.isunseen" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
             <Icon type="ios-clock-outline" size="14.5"></Icon>
@@ -175,7 +131,7 @@
                 </Badge>
               </div>
               <div class="n-h-center n-align-v">
-                <p class="n-from-name">{{convertContactListToNames(item.attributes.envelope.from)}}</p>
+                <p class="n-from-name">{{convertContactsToNames(item.attributes.envelope.from)}}</p>
                 <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
               </div>
             </div>
@@ -186,38 +142,7 @@
         </li>
       </ul>
     </div>
-    <div class="n-html-cont n-overflow-h n-flex n-align-v">
-      <NMask v-bind:isLoading="isLoading"></NMask>
-      <div class="n-frame-head">
-        <div v-if="currentItem">
-          <div class="n-align-v">
-            <div class="n-subject">
-              <h2>{{currentItem.attributes.envelope.subject}}</h2>
-            </div>
-            <div class="n-c-from" v-if="currentItem">
-              <p class="n-flex n-v-center">
-                <Avatar icon="person" size="small" />
-                <label class="n-infos n-flex-inline">
-                      <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.from)}}</span>
-                      <span class="n-tag">to</span>
-                      <span class="n-hoverable">{{convertContactListToNames(currentItem.attributes.envelope.to.slice(0, 2))}}</span>
-                      <span class="n-clickable n-v-center">
-                        <Poptip trigger="hover" v-bind:content="convertContactListToAddresses(currentItem.attributes.envelope.to)">
-                          <Icon class="n-icon" type="ios-more-outline"></Icon>
-                        </Poptip>
-                      </span>
-                    </label>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="n-frame-container n-flex">
-        <div class="n-frame-body">
-          <iframe v-on:load="frameLoad" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html"></iframe>
-        </div>
-      </div>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -233,24 +158,22 @@
   } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation'
-  import NMask from './shared/Mask'
   export default {
     components: {
-      Navigation,
-      NMask
+      Navigation
     },
     computed: {
       ...mapState({
         mails: state => state.mailsys.mails.data,
         status: state => state.mailsys.status,
-        isLoading: state => state.mailsys.isLoading,
         hoveredIndex: state => state.mailsys.hoveredIndex,
         selectedIndex: state => state.mailsys.selectedIndex
       }),
       ...mapGetters({
         parse: 'mailsys/parse',
         sort: 'mailsys/sort',
-        map: 'mailsys/map'
+        map: 'mailsys/map',
+        convertContactsToNames: 'mailsys/convertContactsToNames'
       })
     },
     methods: {
@@ -261,19 +184,8 @@
         'setHoveredIndex',
         'setSelectedIndex'
       ]),
-      retrieveHtml(item, index) {
-        if (!this.currentItem || item.attributes.uid !== this.currentItem.attributes.uid) {
-          this.$Loading.start()
-          if (item.body instanceof Array) {
-            this.html = item.body.find(f => f.struct.subtype === 'html').text
-          } else {
-            item.body.text ? this.html = item.body.text : ''
-          }
-          if (item.isunseen) this.markSeen(item)
-          this.currentItem = item
-          this.setSelectedIndex(index)
-          this.scrollFrame2Top()
-        }
+      route(item) {
+        this.$router.push({ path: `/mail/${item.attributes.uid}` })
       },
       mouseenter(e, index) {
         this.setHoveredIndex(index)
@@ -286,20 +198,8 @@
         this.positionX = ((w - e.layerX) / w * 100) + '%'
         console.log(w, e.layerX, this.positionX)
       },
-      frameLoad(e) {
-        let obj = e.target
-        obj.height = obj.contentDocument.body.scrollHeight + 'px'
-        obj.width = obj.contentDocument.body.scrollWidth + 'px'
-        this.$Loading.finish()
-      },
       scrollFrame2Top() {
         document.querySelector('.n-frame-body').scrollTop = 0
-      },
-      convertContactListToNames(array) {
-        return array.map(m => m.name || m.mailbox).join('; ')
-      },
-      convertContactListToAddresses(array) {
-        return array.map(m => `${m.mailbox}@${m.host}`).join('; ')
       },
       dateNormalize
     },

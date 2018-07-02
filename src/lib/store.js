@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { fetchDB, updateDB, login, fetchList, fetchDetails, markSeen } from './service'
 import { sort, isunseen } from './utils'
-import { stat } from 'fs';
 
 Vue.use(Vuex)
 
@@ -138,6 +137,12 @@ const getters = {
       if (!!m) m.isunseen = isunseen(m)
       return m
     })
+  },
+  convertContactsToNames: () => (array) => {
+    return array.map(m => m.name || m.mailbox).join('; ')
+  },
+  convertContactsToAddresses: () => (array) => {
+    return array.map(m => `${m.mailbox}@${m.host}`).join('; ')
   }
 }
 
