@@ -98,16 +98,14 @@
       })
     },
     watch: {
-      $route() {
-        let uid = Number(this.$route.params.id)
-        this.retrieveHtml(uid)
-      }
-    },
-    mounted() {
-      let uid = Number(this.$route.params.id)
-      this.retrieveHtml(uid)
+      'mails': 'retrieve',
+      '$route': 'retrieve'
     },
     methods: {
+      retrieve() {
+        let uid = Number(this.$route.params.id)
+        this.retrieveHtml(uid)
+      },
       find(uid) {
         return this.mails.length > 0 ? this.mails.find(f => {
           return f.attributes.uid === uid
