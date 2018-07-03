@@ -61,7 +61,8 @@ export const fetchList = (uuid) => {
     body: JSON.stringify({
       condition: 'ALL',
       date: (new Date(2017, 11, 12)).toDateString(),
-      uuid
+      uuid,
+      type: 'INBOX'
     }),
     headers: new Headers({
       'Content-Type': 'application/json'

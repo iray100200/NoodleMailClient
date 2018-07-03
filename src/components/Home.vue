@@ -2,19 +2,54 @@
   .n-home {
     height: 100%;
     ::-webkit-scrollbar {
-      width: 3px;
+      width: 2px;
       background: transparent;
     }
     ::-webkit-scrollbar-thumb {
-      background: #7779c6;
+      background: #9b95c9;
+    }
+    ::-webkit-scrollbar-thumb:window-inactive {
+      background: #aaa;
     }
     .n-list-cont {
-      padding: 4px 4px 6px 6px;
       width: 360px;
       background-color: #444693;
+      position: relative;
+      .n-ul {
+        padding: 52px 6px 4px;
+        overflow: auto;
+        flex: 1;
+        direction: rtl;
+        > * {
+          direction: ltr;
+          text-align: left;
+        }
+      }
+      .n-search-cont {
+        position: absolute;
+        top: 0;
+        z-index: 1000;
+        background: #444694;
+        direction: rtl;
+        padding: 12px 8px 8px;
+        left: 4px;
+        right: 0;
+      }
+      .n-search {
+        overflow-y: scroll;
+        direction: ltr;
+      }
+      .n-funs {
+        color: #afb4db;
+        font-size: 20px;
+        padding: 0px 0;
+      }
     }
     .mail-item-cont {
       position: relative;
+      &:first-child {
+        margin-top: 0;
+      }
       &.active:not(.selected) {
         &:hover {
           box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
@@ -59,6 +94,7 @@
       border-radius: 4px;
       overflow: hidden;
       .mail-item {
+        text-align: left;
         padding: 6px 12px;
         background-color: #444693;
         transition: 0.6s background-color, box-shadow;
@@ -114,8 +150,13 @@
 <template>
   <div class="n-home n-flex">
     <Navigation v-on:inbox="getInbox()"></Navigation>
-    <div class="n-overflow-y n-list-cont" v-bind:class="{ 'n-overflow-h': !mails.length }">
-      <ul>
+    <div class="n-overflow-y n-list-cont n-flex n-align-v" v-bind:class="{ 'n-overflow-h': !mails.length }">
+      <div class="n-search-cont">
+        <div class="n-search">
+          <Search />
+        </div>
+      </div>
+      <ul class="n-ul">
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
@@ -165,9 +206,11 @@
   } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation'
+  import Search from '../shared/Search'
   export default {
     components: {
-      Navigation
+      Navigation,
+      Search
     },
     computed: {
       ...mapState({
