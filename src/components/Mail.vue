@@ -76,7 +76,7 @@
       </div>
     </div>
     <div class="n-frame-container n-flex">
-      <div class="n-frame-body">
+      <div class="n-frame-body" ref="frameBody">
         <iframe v-on:load="frameLoad" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html"></iframe>
       </div>
     </div>
@@ -119,6 +119,7 @@
       },
       retrieveHtml(uid) {
         this.$Loading.start()
+        this.$refs.frameBody.scrollTop = 0
         this.mail = this.find(uid)
         if (this.mail) {
           this.html = this.getHtml(this.mail.body)

@@ -114,7 +114,7 @@
         </li>
         <li class="mail-item-cont active" 
           v-for="(item, index) in map(mails)" 
-          v-bind:class="{ 'selected' : index === selectedIndex }" 
+          v-bind:class="{ 'selected' : item.attributes.uid === currentId }" 
           v-on:click="route(item)" 
           v-on:mouseenter="mouseenter($event, index)" 
           v-on:mousemove="mousemove($event, index)"
@@ -209,7 +209,7 @@
         html: '',
         positionX: '100%',
         start: 0,
-        currentItem: null,
+        currentId: null,
         mailTemps: Array.apply(this, {
           length: parseInt(document.documentElement.clientHeight / 80)
         })
@@ -225,6 +225,14 @@
           })
         }
       })
+    },
+    watch: {
+      $route(to) {
+        this.currentId = Number(to.params.id)
+      }
+    },
+    created() {
+      this.currentId = Number(this.$route.params.id)
     },
     updated() {},
     beforeUpdate() {}
