@@ -257,7 +257,7 @@
       }
     },
     created() {
-      this.currentId = this.decodeId(this.$route.params.id)
+      this.currentId = this.$route.params.id
     },
     updated() {},
     beforeUpdate() {}
