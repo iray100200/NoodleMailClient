@@ -1,6 +1,7 @@
 <style lang="scss">
   .n-html-cont {
     position: relative;
+    min-width: 525px;
     flex: 1;
      ::-webkit-scrollbar {
       width: 4px;
@@ -20,16 +21,25 @@
       background-color: #f6f5ec;
     }
     .n-c-from {
-      padding: 8px 36px 9px;
+      padding: 4px 36px 4px;
       color: #ccf;
       background-color: #444693;
-    }
-    .n-c-from>p {
-      margin-top: 2px;
     }
     .n-infos {
       margin-left: 8px;
       font-size: 1.2em;
+      flex: 1;
+    }
+    .n-actions {
+      > span {
+        margin: 0 4px;
+        padding: 0 8px;
+        width: 24px;
+        height: 32px;
+      }
+      .n-icon {
+        font-size: 20px;
+      }
     }
     .n-tag {
       padding: 0 8px;
@@ -60,7 +70,7 @@
           <div class="n-c-from">
             <p class="n-flex n-v-center">
               <Avatar icon="person" size="small" />
-              <label class="n-infos n-flex-inline">
+              <span class="n-infos n-flex-inline">
                 <span class="n-hoverable">{{convertContactsToNames(current.attributes.envelope.from)}}</span>
                 <span class="n-tag">to</span>
                 <span class="n-hoverable">{{convertContactsToNames(current.attributes.envelope.to.slice(0, 2))}}</span>
@@ -69,7 +79,21 @@
                     <Icon class="n-icon" type="ios-more-outline"></Icon>
                   </Poptip>
                 </span>
-              </label>
+              </span>
+              <span class="n-actions n-flex-inline">
+                <span title="回复" class="n-link n-v-center">
+                  <Icon type="reply" class="n-icon"></Icon>
+                </span>
+                <span title="回复全部" class="n-link n-v-center">
+                  <Icon type="reply-all" class="n-icon"></Icon>
+                </span>
+                <span title="转发" class="n-link n-v-center">
+                  <Icon type="forward" class="n-icon"></Icon>
+                </span>
+                <span title="删除" class="n-link n-v-center">
+                  <Icon type="trash-b" class="n-icon"></Icon>
+                </span>
+              </span>
             </p>
           </div>
         </div>

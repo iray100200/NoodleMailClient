@@ -1,8 +1,15 @@
 <style lang="scss">
   .n-home {
     height: 100%;
+    ::-webkit-scrollbar {
+      width: 3px;
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #7779c6;
+    }
     .n-list-cont {
-      padding: 4px 3px 6px 6px;
+      padding: 4px 4px 6px 6px;
       width: 360px;
       background-color: #444693;
     }
@@ -114,7 +121,7 @@
         </li>
         <li class="mail-item-cont active" 
           v-for="(item, index) in map(mails)" 
-          v-bind:class="{ 'selected' : item.attributes.uid === currentId }" 
+          v-bind:class="{ 'selected' : encodeId(item.attributes.uid) === currentId }" 
           v-on:click="route(item)" 
           v-on:mouseenter="mouseenter($event, index)" 
           v-on:mousemove="mousemove($event, index)"
