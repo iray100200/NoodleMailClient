@@ -88,7 +88,7 @@ const actions = {
         let fetchDBResult = await fetchDB()
         let loginResult = await login()
         let addlist = [], removeList = [], mailList = []
-        if (loginResult.error) {
+        if (loginResult instanceof Error || loginResult.error) {
           mailList = fetchDBResult.result.map(m => m.data)
           return commitFetch()(mailList, 'error')
         }

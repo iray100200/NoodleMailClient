@@ -185,7 +185,7 @@
         'setCurrent'
       ]),
       route(item) {
-        this.$router.push({ path: `/mail/${item.attributes.uid}` })
+        this.$router.push({ path: `/mail/${this.encodeId(item.attributes.uid)}` })
       },
       mouseenter(e, index) {
         this.setHoveredIndex(index)
@@ -203,8 +203,14 @@
       },
       find(uid) {
         return this.mails.length > 0 ? this.mails.find(f => {
-          return f.attributes.uid === uid
+          return f.attributes.uid === this.decodeId(uid)
         }) : null
+      },
+      encodeId(id) {
+        return Number(id).toString('36') || null
+      },
+      decodeId(id) {
+        return parseInt(String(id), '36') || null
       },
       dateNormalize
     },
@@ -233,13 +239,13 @@
           let current = this.find(this.currentId)
           /* Load the current at the first loading time */
           /* Then, Has a better way? */
-          if (current) this.setCurrent(current) 
+          if (current) this.setCurrent(current)
         }
       })
     },
     watch: {
       $route(to) {
-        this.currentId = Number(to.params.id)
+        this.currentId = to.params.id
         let current = this.find(this.currentId)
         /* If routes change, load the current */
         /* Then, Has a better way? */
@@ -247,7 +253,7 @@
       }
     },
     created() {
-      this.currentId = Number(this.$route.params.id)
+      this.currentId = this.decodeId(this.$route.params.id)
     },
     updated() {},
     beforeUpdate() {}
