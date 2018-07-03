@@ -83,9 +83,11 @@
   </div>
 </template>
 <script>
+  import { isunseen } from '../lib/utils'
   import {
     mapState,
-    mapGetters
+    mapGetters,
+    mapActions
   } from 'vuex'
   export default {
     computed: {
@@ -103,6 +105,9 @@
       }
     },
     methods: {
+      ...mapActions('mailsys', [
+        'markSeen'
+      ]),
       html() {
         if (this.current) {
           let body = this.current.body
@@ -116,6 +121,7 @@
       begin() {
         this.$Loading.start()
         if (this.$refs.frameBody) this.$refs.frameBody.scrollTop = 0
+        if (isunseen(this.current)) this.markSeen(this.current)
       },
       frameLoad(e) {
         let obj = e.target

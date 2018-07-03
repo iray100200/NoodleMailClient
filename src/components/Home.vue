@@ -179,7 +179,6 @@
     methods: {
       ...mapActions('mailsys', [
         'fetchMailListAsync',
-        'markSeen',
         'setFrame',
         'setHoveredIndex',
         'setSelectedIndex',
