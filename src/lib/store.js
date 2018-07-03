@@ -16,7 +16,8 @@ const state = {
   selectedIndex: -1,
   uuid: null,
   status: {},
-  isLoading: false
+  isLoading: false,
+  current: null
 }
 
 const mutations = {
@@ -37,6 +38,9 @@ const mutations = {
   },
   setSelectedIndex(state, payload) {
     state.selectedIndex = payload
+  },
+  setCurrent(state, payload) {
+    state.current = { ...payload }
   }
 }
 
@@ -63,6 +67,9 @@ const actions = {
   },
   setSelectedIndex({ commit }, value) {
     commit('setSelectedIndex', value)
+  },
+  setCurrent({ commit }, value) {
+    commit('setCurrent', value)
   },
   fetchMailListAsync({ commit }) {
     function commitFetch(uuid) {

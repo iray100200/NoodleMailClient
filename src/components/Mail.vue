@@ -52,20 +52,20 @@
 <template>
   <div class="n-html-cont n-overflow-h n-flex n-align-v">
     <div class="n-frame-head">
-      <div v-if="mail">
+      <div v-if="current">
         <div class="n-align-v">
           <div class="n-subject">
-            <h2>{{mail.attributes.envelope.subject}}</h2>
+            <h2>{{current.attributes.envelope.subject}}</h2>
           </div>
-          <div class="n-c-from" v-if="mail">
+          <div class="n-c-from">
             <p class="n-flex n-v-center">
               <Avatar icon="person" size="small" />
               <label class="n-infos n-flex-inline">
-                <span class="n-hoverable">{{convertContactsToNames(mail.attributes.envelope.from)}}</span>
+                <span class="n-hoverable">{{convertContactsToNames(current.attributes.envelope.from)}}</span>
                 <span class="n-tag">to</span>
-                <span class="n-hoverable">{{convertContactsToNames(mail.attributes.envelope.to.slice(0, 2))}}</span>
+                <span class="n-hoverable">{{convertContactsToNames(current.attributes.envelope.to.slice(0, 2))}}</span>
                 <span class="n-clickable n-v-center">
-                  <Poptip trigger="hover" v-bind:content="convertContactsToAddresses(mail.attributes.envelope.to)">
+                  <Poptip trigger="hover" v-bind:content="convertContactsToAddresses(current.attributes.envelope.to)">
                     <Icon class="n-icon" type="ios-more-outline"></Icon>
                   </Poptip>
                 </span>
@@ -77,7 +77,7 @@
     </div>
     <div class="n-frame-container n-flex">
       <div class="n-frame-body" ref="frameBody">
-        <iframe v-on:load="frameLoad" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html"></iframe>
+        <iframe v-on:load="frameLoad" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html(current)"></iframe>
       </div>
     </div>
   </div>
@@ -94,48 +94,34 @@
         convertContactsToAddresses: 'mailsys/convertContactsToAddresses'
       }),
       ...mapState({
-        mails: state => state.mailsys.mails.data
+        current: state => state.mailsys.current
       })
     },
     watch: {
-      'mails': 'retrieve',
-      '$route': 'retrieve'
+      current(to, from) {
+        if (to) this.begin()
+      }
     },
     methods: {
-      retrieve() {
-        let uid = Number(this.$route.params.id)
-        this.retrieveHtml(uid)
-      },
-      find(uid) {
-        return this.mails.length > 0 ? this.mails.find(f => {
-          return f.attributes.uid === uid
-        }) : null
-      },
-      getHtml(body) {
-        if (body instanceof Array) {
-          return body.find(f => f.struct.subtype === 'html').text
+      html() {
+        if (this.current) {
+          let body = this.current.body
+          if (body instanceof Array) {
+            return body.find(f => f.struct.subtype === 'html').text
+          }
+          return body.text || ''
         }
-        return body.text || ''
+        return ''
       },
-      retrieveHtml(uid) {
+      begin() {
         this.$Loading.start()
-        this.$refs.frameBody.scrollTop = 0
-        this.mail = this.find(uid)
-        if (this.mail) {
-          this.html = this.getHtml(this.mail.body)
-        }
+        if (this.$refs.frameBody) this.$refs.frameBody.scrollTop = 0
       },
       frameLoad(e) {
         let obj = e.target
         obj.height = obj.contentDocument.body.scrollHeight + 'px'
         obj.width = obj.contentDocument.body.scrollWidth + 'px'
         this.$Loading.finish()
-      }
-    },
-    data() {
-      return {
-        mail: null,
-        html: ''
       }
     }
   }

@@ -182,7 +182,8 @@
         'markSeen',
         'setFrame',
         'setHoveredIndex',
-        'setSelectedIndex'
+        'setSelectedIndex',
+        'setCurrent'
       ]),
       route(item) {
         this.$router.push({ path: `/mail/${item.attributes.uid}` })
@@ -200,6 +201,11 @@
       },
       scrollFrame2Top() {
         document.querySelector('.n-frame-body').scrollTop = 0
+      },
+      find(uid) {
+        return this.mails.length > 0 ? this.mails.find(f => {
+          return f.attributes.uid === uid
+        }) : null
       },
       dateNormalize
     },
@@ -224,11 +230,21 @@
             desc: '连接服务器失败，请稍后重新尝试！'
           })
         }
+        if (mutation.type === 'mailsys/fetch' && state.mailsys.mails.data.length > 0) {
+          let current = this.find(this.currentId)
+          /* Load the current at the first loading time */
+          /* Then, Has a better way? */
+          if (current) this.setCurrent(current) 
+        }
       })
     },
     watch: {
       $route(to) {
         this.currentId = Number(to.params.id)
+        let current = this.find(this.currentId)
+        /* If routes change, load the current */
+        /* Then, Has a better way? */
+        if (current) this.setCurrent(current)
       }
     },
     created() {
