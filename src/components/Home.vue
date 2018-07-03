@@ -198,9 +198,6 @@
         this.positionX = ((w - e.layerX) / w * 100) + '%'
         console.log(w, e.layerX, this.positionX)
       },
-      scrollFrame2Top() {
-        document.querySelector('.n-frame-body').scrollTop = 0
-      },
       find(uid) {
         return this.mails.length > 0 ? this.mails.find(f => {
           return f.attributes.uid === this.decodeId(uid)
