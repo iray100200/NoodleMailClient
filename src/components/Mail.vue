@@ -111,15 +111,17 @@
           return f.attributes.uid === uid
         }) : null
       },
+      getHtml(body) {
+        if (body instanceof Array) {
+          return body.find(f => f.struct.subtype === 'html').text
+        }
+        return body.text || ''
+      },
       retrieveHtml(uid) {
         this.$Loading.start()
         this.mail = this.find(uid)
         if (this.mail) {
-          if (this.mail.body instanceof Array) {
-            this.html = this.mail.body.find(f => f.struct.subtype === 'html').text
-          } else {
-            this.mail.body.text ? this.html = this.mail.body.text : ''
-          }
+          this.html = this.getHtml(this.mail.body)
         }
       },
       frameLoad(e) {
