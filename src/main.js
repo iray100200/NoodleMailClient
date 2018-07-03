@@ -12,7 +12,12 @@ import 'iview/dist/styles/iview.css'
 Vue.config.productionTip = false
 Vue.use(iView)
 
-/* eslint-disable no-new */
+iView.LoadingBar.config({
+  color: '#009ad6',
+  failedColor: '#f0ad4e',
+  height: 2
+})
+
 new Vue({
   el: '#app',
   store,
