@@ -247,7 +247,6 @@
       mousemove(e, index) {
         let w = e.currentTarget.offsetWidth
         this.positionX = ((w - e.layerX) / w * 100) + '%'
-        console.log(w, e.layerX, this.positionX)
       },
       find(uid) {
         return this.mails.length > 0 ? this.mails.find(f => {
