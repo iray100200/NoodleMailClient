@@ -163,7 +163,7 @@
           <div class="mail-item mail-temp n-loading"></div>
         </li>
         <li class="mail-item-cont active" 
-          v-for="(item, index) in map(mails)" 
+          v-for="(item, index) in mails" 
           v-bind:class="{ 'selected' : encodeId(item.attributes.uid) === currentId }" 
           v-on:click="route(item)" 
           v-on:mouseenter="mouseenter($event, index)" 
@@ -216,7 +216,6 @@
     },
     computed: {
       ...mapState({
-        mails: state => state.mailsys.mails.data,
         status: state => state.mailsys.status,
         hoveredIndex: state => state.mailsys.hoveredIndex,
         selectedIndex: state => state.mailsys.selectedIndex
@@ -224,7 +223,7 @@
       ...mapGetters({
         parse: 'mailsys/parse',
         sort: 'mailsys/sort',
-        map: 'mailsys/map',
+        get: 'mailsys/get',
         convertContactsToNames: 'mailsys/convertContactsToNames'
       })
     },
@@ -237,7 +236,7 @@
         'setCurrent'
       ]),
       route(item) {
-        this.$router.push({ path: `/mail/${this.encodeId(item.attributes.uid)}` })
+        this.$router.push({ path: `/mail/${this.targetName}/${this.encodeId(item.attributes.uid)}` })
       },
       mouseenter(e, index) {
         this.setHoveredIndex(index)
@@ -270,27 +269,29 @@
         positionX: '100%',
         start: 0,
         currentId: null,
+        targetName: null,
+        mails: [],
         mailTemps: Array.apply(this, {
           length: Math.floor((document.documentElement.clientHeight - 60) / 80)
-        })
+        }).map(() => 0)
       }
     },
     mounted() {
-      this.fetchMailListAsync()
-      this.$store.subscribe((mutation, state) => {
+      this.$store.subscribe(function (mutation, state) {
         if (mutation.type === 'mailsys/fetch' && state.mailsys.status.code === 'error') {
           this.$Notice.error({
             title: '状态提醒',
             desc: '连接服务器失败，请稍后重新尝试！'
           })
         }
-        if (mutation.type === 'mailsys/fetch' && state.mailsys.mails.data.length > 0) {
+        if (mutation.type === 'mailsys/fetch') {
+          this.mails = this.get(this.targetName)
           let current = this.find(this.currentId)
           /* Load the current at the first loading time */
           /* Then, Has a better way? */
           if (current) this.setCurrent(current)
         }
-      })
+      }.bind(this))
     },
     watch: {
       $route(to) {
@@ -299,10 +300,17 @@
         /* If routes change, load the current */
         /* Then, Has a better way? */
         if (current) this.setCurrent(current)
+        if ((this.targetName !== to.params.target)) {
+          this.targetName = target
+          this.fetchMailListAsync({ target })
+        }
       }
     },
     created() {
-      this.currentId = this.$route.params.id
+      let { id, target } = this.$route.params
+      this.currentId = id
+      this.targetName = target
+      this.fetchMailListAsync({ target })
     },
     updated() {},
     beforeUpdate() {}

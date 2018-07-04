@@ -14,8 +14,8 @@
         <li title="收件箱">
           <Icon type="ios-email-outline" size="24"></Icon>
         </li>
-        <li title="刷新">
-          <Icon type="ios-loop" size="22"></Icon>
+        <li title="已发送">
+          <Icon type="ios-redo-outline" size="24"></Icon>
         </li>
         <li title="展开更多">
           <Icon type="ios-more-outline" size="24"></Icon>

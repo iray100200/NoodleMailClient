@@ -8,9 +8,21 @@ Vue.use(Vuex)
 const state = {
   accounts: [],
   mails: {
-    data: [],
-    order: 'desc',
-    orderBy: 'attributes.date'
+    inbox: {
+      data: [],
+      order: 'desc',
+      orderBy: 'attributes.date'
+    },
+    sent: {
+      data: [],
+      order: 'desc',
+      orderBy: 'attributes.date'
+    },
+    drafts: {
+      data: [],
+      order: 'desc',
+      orderBy: 'attributes.date'
+    }
   },
   hoveredIndex: -1,
   selectedIndex: -1,
@@ -22,9 +34,10 @@ const state = {
 
 const mutations = {
   fetch(state, payload) {
-    state.mails.data = payload.data
-    state.uuid = payload.uuid
-    state.status = payload.status
+    let { target, data, uuid, status } = payload
+    state.mails[target.toLowerCase()].data = data
+    state.uuid = uuid
+    state.status = status
   },
   markSeen(state, payload) {
     state.mails = { ...payload }
@@ -71,10 +84,11 @@ const actions = {
   setCurrent({ commit }, value) {
     commit('setCurrent', value)
   },
-  fetchMailListAsync({ commit }) {
-    function commitFetch(uuid) {
+  fetchMailListAsync({ commit }, value) {
+    function commitFetch(uuid, target) {
       return (list, statusCode) => {
         return commit('fetch', {
+          target,
           data: sort(list, 'attributes.date', 'Date'),
           uuid: uuid || null,
           status: {
@@ -84,16 +98,17 @@ const actions = {
       }
     }
     (async () => {
+      let { target } = value
       try {
-        let fetchDBResult = await fetchDB()
+        let fetchDBResult = await fetchDB(target)
         let loginResult = await login()
         let addlist = [], removeList = [], mailList = []
         if (loginResult instanceof Error || loginResult.error) {
           mailList = fetchDBResult.result.map(m => m.data)
           return commitFetch()(mailList, 'error')
         }
-        let commitFetchLoginResult = commitFetch(loginResult.uuid)
-        let fetchListResult = await fetchList(loginResult.uuid)
+        let commitFetchLoginResult = commitFetch(loginResult.uuid, target)
+        let fetchListResult = await fetchList(loginResult.uuid, target)
         if (fetchDBResult.result && fetchDBResult.result.length > 0) {
           fetchDBResult.result.forEach(f => {
             if (!fetchListResult.result.some(s => {
@@ -139,8 +154,8 @@ const getters = {
     return state.mails
   },
   sort: () => sort,
-  map: () => (data) => {
-    return data.map(m => {
+  get: (state) => (target) => {
+    return state.mails[target.toLowerCase()].data.map(m => {
       if (!!m) m.isunseen = isunseen(m)
       return m
     })

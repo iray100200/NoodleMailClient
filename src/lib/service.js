@@ -1,6 +1,6 @@
 import NoodleDB from './database'
 
-export const fetchDB = () => {
+export const fetchDB = (target /* Todo */) => {
   return new Promise((resolve) => {
     let dbInstance = new NoodleDB()
     dbInstance.connect('noodle', 1)
@@ -55,14 +55,14 @@ export const login = () => {
     .then(res => res.data || res.error)
 }
 
-export const fetchList = (uuid) => {
+export const fetchList = (uuid, target) => {
   return fetch('http://localhost:3000/imap/receive/list/all', {
     method: 'POST',
     body: JSON.stringify({
       condition: 'ALL',
       date: (new Date(2017, 11, 12)).toDateString(),
       uuid,
-      type: 'INBOX'
+      type: target
     }),
     headers: new Headers({
       'Content-Type': 'application/json'

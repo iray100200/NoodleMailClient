@@ -10,18 +10,23 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: '首页',
       component: Home,
       children: [
         {
-          name: 'mail',
-          path: 'mail/:id',
+          path: 'mail/:target',
           component: Mail
         },
         {
-          name: 'new',
+          path: 'mail/:target/:id',
+          component: Mail
+        },
+        {
           path: 'new',
           component: New
+        },
+        {
+          path: '*',
+          redirect: 'mail/inbox'
         }
       ]
     }
