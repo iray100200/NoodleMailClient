@@ -25,7 +25,7 @@
     font-size: 18px;
     height: 24px;
     color: #afb4db;
-    width: 44px;
+    width: 36px;
     height: 100%;
     border-right: 1px groove #494e8f;
   }
