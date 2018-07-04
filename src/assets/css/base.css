@@ -111,8 +111,8 @@ li {
 .n-overflow-y {
   overflow-y: auto;
 }
-.n-overflow-h {
-  overflow: hidden;
+.n-overflow-h::-webkit-scrollbar-thumb {
+  background: transparent!important;
 }
 .n-icon {
   font-size: 16px;

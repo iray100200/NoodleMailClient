@@ -1,6 +1,6 @@
 <style>
   .n-input-cont {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 4px;
     height: 30px;
   }
@@ -21,11 +21,25 @@
     color: #afb4db;
     margin-right: 6px;
   }
+  .n-filter-icon {
+    font-size: 18px;
+    height: 24px;
+    color: #afb4db;
+    width: 44px;
+    height: 100%;
+    border-right: 1px groove #494e8f;
+  }
 </style>
 <template>
   <div class="n-input-cont n-v-center">
-    <input type="text" />
-    <span class="n-flex n-vh-center n-search-icon">
+    <span class="n-flex n-vh-center n-filter-icon n-link">
+      <Icon type="ios-settings-strong"></Icon>
+    </span>
+    <span class="n-flex n-vh-center n-filter-icon n-link">
+      <Icon type="ios-loop-strong"></Icon>
+    </span>
+    <input type="text" placeholder="搜索" />
+    <span class="n-flex n-vh-center n-search-icon n-link">
       <Icon type="ios-search-strong"></Icon>
     </span>
   </div>

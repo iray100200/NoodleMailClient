@@ -8,16 +8,13 @@
     ::-webkit-scrollbar-thumb {
       background: #9b95c9;
     }
-    ::-webkit-scrollbar-thumb:window-inactive {
-      background: #aaa;
-    }
     .n-list-cont {
       width: 360px;
       background-color: #444693;
       position: relative;
       .n-ul {
         padding: 52px 6px 4px;
-        overflow: auto;
+        overflow-y: scroll;
         flex: 1;
         direction: rtl;
         > * {
@@ -25,24 +22,27 @@
           text-align: left;
         }
       }
-      .n-search-cont {
+      .n-filter-cont {
         position: absolute;
         top: 0;
         z-index: 1000;
         background: #444694;
         direction: rtl;
-        padding: 12px 8px 8px;
-        left: 4px;
+        padding: 12px 8px 8px 10px;
+        left: 2px;
         right: 0;
       }
-      .n-search {
+      .n-filter {
         overflow-y: scroll;
         direction: ltr;
       }
-      .n-funs {
+      .n-more {
         color: #afb4db;
         font-size: 20px;
         padding: 0px 0;
+        margin-left: 4px;
+        width: 32px;
+        height: 32px;
       }
     }
     .mail-item-cont {
@@ -150,13 +150,15 @@
 <template>
   <div class="n-home n-flex">
     <Navigation v-on:inbox="getInbox()"></Navigation>
-    <div class="n-overflow-y n-list-cont n-flex n-align-v" v-bind:class="{ 'n-overflow-h': !mails.length }">
-      <div class="n-search-cont">
-        <div class="n-search">
-          <Search />
+    <div class="n-overflow-y n-list-cont n-flex n-align-v">
+      <div class="n-filter-cont">
+        <div class="n-filter n-flex">
+          <span style="flex: 1">
+            <Filtering />
+          </span>
         </div>
       </div>
-      <ul class="n-ul">
+      <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
@@ -206,11 +208,11 @@
   } from 'vuex'
   import base from "../lib/base";
   import Navigation from './Navigation'
-  import Search from '../shared/Search'
+  import Filtering from '../shared/Filter'
   export default {
     components: {
       Navigation,
-      Search
+      Filtering
     },
     computed: {
       ...mapState({
@@ -269,7 +271,7 @@
         start: 0,
         currentId: null,
         mailTemps: Array.apply(this, {
-          length: parseInt(document.documentElement.clientHeight / 80)
+          length: Math.floor((document.documentElement.clientHeight - 60) / 80)
         })
       }
     },

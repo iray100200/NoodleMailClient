@@ -33,8 +33,7 @@
     .n-actions {
       > span {
         margin: 0 4px;
-        padding: 0 8px;
-        width: 24px;
+        width: 32px;
         height: 32px;
       }
       .n-icon {

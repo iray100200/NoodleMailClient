@@ -18,6 +18,8 @@ iView.LoadingBar.config({
   height: 2
 })
 
+iView.LoadingBar.finish()
+
 new Vue({
   el: '#app',
   store,
