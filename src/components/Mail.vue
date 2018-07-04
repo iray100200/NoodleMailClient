@@ -80,16 +80,16 @@
                 </span>
               </span>
               <span class="n-actions n-flex-inline">
-                <span title="回复" class="n-link n-v-center">
+                <span title="回复" class="n-link n-vh-center">
                   <Icon type="reply" class="n-icon"></Icon>
                 </span>
-                <span title="回复全部" class="n-link n-v-center">
+                <span title="回复全部" class="n-link n-vh-center">
                   <Icon type="reply-all" class="n-icon"></Icon>
                 </span>
-                <span title="转发" class="n-link n-v-center">
+                <span title="转发" class="n-link n-vh-center">
                   <Icon type="forward" class="n-icon"></Icon>
                 </span>
-                <span title="删除" class="n-link n-v-center">
+                <span title="删除" class="n-link n-vh-center">
                   <Icon type="trash-b" class="n-icon"></Icon>
                 </span>
               </span>
