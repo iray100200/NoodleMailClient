@@ -5,11 +5,21 @@
     </div>
     <div class="n-nav-cont">
       <ul>
-        <li><Icon type="ios-person-outline" size="25"></Icon></li>
-        <li><Icon type="ios-plus-outline" size="24"></Icon></li>
-        <li><Icon type="ios-email-outline" size="24"></Icon></li>
-        <li><Icon type="ios-loop" size="22"></Icon></li>
-        <li><Icon type="ios-more-outline" size="24"></Icon></li>
+        <li title="关联账户">
+          <Icon type="ios-person-outline" size="25"></Icon>
+        </li>
+        <li title="新邮件">
+          <Icon type="ios-plus-outline" size="24"></Icon>
+        </li>
+        <li title="收件箱">
+          <Icon type="ios-email-outline" size="24"></Icon>
+        </li>
+        <li title="刷新">
+          <Icon type="ios-loop" size="22"></Icon>
+        </li>
+        <li title="展开更多">
+          <Icon type="ios-more-outline" size="24"></Icon>
+        </li>
       </ul>
     </div>
   </div>
