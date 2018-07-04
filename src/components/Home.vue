@@ -297,10 +297,11 @@
       $route(to) {
         this.currentId = to.params.id
         let current = this.find(this.currentId)
+        let target = to.params.target
         /* If routes change, load the current */
         /* Then, Has a better way? */
         if (current) this.setCurrent(current)
-        if ((this.targetName !== to.params.target)) {
+        if ((this.targetName !== target)) {
           this.targetName = target
           this.fetchMailListAsync({ target })
         }

@@ -5,21 +5,31 @@
     </div>
     <div class="n-nav-cont">
       <ul>
-        <li title="关联账户">
-          <Icon type="ios-person-outline" size="25"></Icon>
-        </li>
-        <li title="新邮件">
-          <Icon type="ios-plus-outline" size="24"></Icon>
-        </li>
-        <li title="收件箱">
-          <Icon type="ios-email-outline" size="24"></Icon>
-        </li>
-        <li title="已发送">
-          <Icon type="ios-redo-outline" size="24"></Icon>
-        </li>
-        <li title="展开更多">
-          <Icon type="ios-more-outline" size="24"></Icon>
-        </li>
+        <router-link title="关联账户" tag="li" to="/mail/inbox">
+          <span class="n-icon n-vh-center">
+            <Icon type="ios-person-outline" size="25"></Icon>
+          </span>
+        </router-link>
+        <router-link title="新邮件" tag="li" to="/mail/inbox">
+          <span class="n-icon n-vh-center">
+            <Icon type="ios-plus-outline" size="24"></Icon>
+          </span>
+        </router-link>
+        <router-link title="收件箱" tag="li" to="/mail/inbox">
+          <span class="n-icon n-vh-center">
+            <Icon type="ios-email-outline" size="24"></Icon>
+          </span>
+        </router-link>
+        <router-link title="已发送" tag="li" to="/mail/sent">
+          <span class="n-icon n-vh-center">
+            <Icon type="ios-redo-outline" size="24"></Icon>
+          </span>
+        </router-link>
+        <router-link title="展开更多" tag="li" to="/mail/inbox">
+          <span class="n-icon n-vh-center">
+            <Icon type="ios-more-outline" size="24"></Icon>
+          </span>
+        </router-link>
       </ul>
     </div>
   </div>
@@ -53,6 +63,10 @@
 .n-nav-cont ul li:hover {
   background: rgba(200, 200, 200, 0.15);
   color: orange;
+}
+.n-icon {
+  width: 100%;
+  height: 100%;
 }
 </style>
 <script>

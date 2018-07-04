@@ -83,11 +83,6 @@ li {
 .n-flex-inline {
   display: inline-flex;
 }
-.n-vh-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .n-v-center {
   display: flex;
   align-items: center;
@@ -95,6 +90,21 @@ li {
 .n-h-center {
   display: flex;
   justify-content: center;
+}
+.n-vh-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.n-center {
+  text-align: center;
+}
+.n-center:after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 100%;
+  vertical-align: middle;
 }
 .n-align-h {
   flex-direction: row;
