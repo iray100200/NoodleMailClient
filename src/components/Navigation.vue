@@ -64,10 +64,6 @@
   background: rgba(200, 200, 200, 0.15);
   color: orange;
 }
-.n-icon {
-  width: 100%;
-  height: 100%;
-}
 </style>
 <script>
   export default {
