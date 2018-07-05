@@ -34,35 +34,35 @@
     </div>
   </div>
 </template>
-<style>
+<style lang="scss">
 .n-navigation {
   width: 48px;
   height: 100%;
   background: #333582;
-}
-.n-logo-cont {
-  height: 48px;
-  color: white;
-}
-.n-logo-cont:hover {
-  background: rgba(222, 222, 222, 0.25);
-}
-.n-nav-cont ul {
-  margin: 0;
-  padding: 0;
-}
-.n-nav-cont ul li {
-  height: 48px;
-  list-style: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff0ee;
-  cursor: pointer;
-}
-.n-nav-cont ul li:hover {
-  background: rgba(200, 200, 200, 0.15);
-  color: orange;
+  .n-logo-cont {
+    height: 48px;
+    color: white;
+  }
+  .n-logo-cont:hover {
+    background: rgba(222, 222, 222, 0.25);
+  }
+  .n-nav-cont ul {
+    margin: 0;
+    padding: 0;
+  }
+  .n-nav-cont ul li {
+    height: 48px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff0ee;
+    cursor: pointer;
+  }
+  .n-nav-cont ul li:hover {
+    background: rgba(200, 200, 200, 0.15);
+    color: orange;
+  }
 }
 </style>
 <script>

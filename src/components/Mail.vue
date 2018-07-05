@@ -1,10 +1,8 @@
 <style lang="scss">
   .n-html-cont {
-    position: relative;
-    min-width: 525px;
-    flex: 1;
      ::-webkit-scrollbar {
       width: 4px;
+      height: 4px;
       background: #eee;
     }
      ::-webkit-scrollbar-thumb {

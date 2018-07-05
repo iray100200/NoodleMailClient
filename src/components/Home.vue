@@ -13,7 +13,7 @@
       background-color: #444693;
       position: relative;
       .n-ul {
-        padding: 52px 6px 4px;
+        padding: 52px 6px 4px 4px;
         overflow-y: scroll;
         flex: 1;
         direction: rtl;
@@ -28,7 +28,7 @@
         z-index: 1000;
         background: #444694;
         direction: rtl;
-        padding: 12px 8px 8px 10px;
+        padding: 12px 8px 8px;
         left: 2px;
         right: 0;
       }
@@ -145,6 +145,14 @@
     .n-avator-cont {
       width: 44px;
     }
+    .n-r-view {
+      position: relative;
+      flex: 1;
+      min-width: 525px;
+      > *:first-child {
+        height: 100%;
+      }
+    }
   }
 </style>
 <template>
@@ -192,7 +200,9 @@
         </li>
       </ul>
     </div>
-    <router-view></router-view>
+    <div class="n-r-view">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
