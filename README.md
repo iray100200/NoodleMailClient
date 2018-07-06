@@ -9,7 +9,7 @@
 Installation
 ============
 
-    npm install imap
+    npm install
 
 Start a server listening on port 8080
 ============
