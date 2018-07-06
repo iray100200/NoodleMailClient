@@ -4,10 +4,10 @@ export const fetchDB = (target /* Todo */) => {
   return new Promise((resolve) => {
     let dbInstance = new NoodleDB()
     dbInstance.connect('noodle', 1)
-    dbInstance.install([{ name: 'mails', keyPath: 'uid' }])
-    dbInstance.open('mails').then(db => {
-      let transaction = db.transaction(['mails'], "readonly")
-      let store = transaction.objectStore('mails')
+    dbInstance.install([{ name: target, keyPath: 'uid' }])
+    dbInstance.open(target).then(db => {
+      let transaction = db.transaction([target], "readonly")
+      let store = transaction.objectStore(target)
       store.getAll().onsuccess = function (e) {
         resolve({ result: e.target.result, db })
       }
@@ -15,12 +15,12 @@ export const fetchDB = (target /* Todo */) => {
   })
 }
 
-export const updateDB = (uid, data) => {
+export const updateDB = (target, uid, data) => {
   let dbInstance = new NoodleDB()
   dbInstance.connect('noodle', 1)
-  dbInstance.open('mails').then(db => {
-    let transaction = db.transaction(['mails'], "readwrite")
-    let store = transaction.objectStore('mails')
+  dbInstance.open(target).then(db => {
+    let transaction = db.transaction([target], "readwrite")
+    let store = transaction.objectStore(target)
     let req = store.openCursor()
     req.onsuccess = function (e) {
       let cursor = e.target.result
