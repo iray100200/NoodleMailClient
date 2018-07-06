@@ -2,36 +2,44 @@ let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
 let db = null;
 
 export default class NoodleDBClinet {
+  db = null
+  _promise = null
   connect(name, version) {
     this.connection = indexedDB.open(name, version || 1)
     return this.connection
   }
-  install(stores) {
-    this.connection.onupgradeneeded = function (event) {
-      stores.forEach(f => {
-        event.target.result.createObjectStore(f.name, { keyPath: f.keyPath })
-      })
-    }
-  }
   createStore(storeName, keyPath) {
     this.connection.result.createObjectStore(storeName, { keyPath })
   }
-  open(storeName) {
-    let _this = this;
-    return new Promise((resolve, reject) => {
-      _this.connection.onsuccess = function (event) {
-        db = _this.connection.result
-        db.onerror = function (event) {
-          console.log("Error creating/accessing IndexedDB database")
-        }
-        db.onsuccess = function (event) {
-          console.log(event)
-        }
-        resolve(db)
-      }
-    })
+  subscribe(callback) {
+    if (callback) this._promise.then(callback)
   }
-  add(storeName, value) {
+  install(stores) {
+    let _this = this
+    function promise() {
+      return new Promise(resolve => {
+        _this.connection.onupgradeneeded = function (event) {
+          let result = event.target.result
+          stores.forEach(s => {
+            result.createObjectStore(s.name, { keyPath: s.keyPath })
+          })
+        }
+        _this.connection.onsuccess = function () {
+          _this.db = _this.connection.result
+          _this.db.onerror = function (event) {
+            console.log("Error creating/accessing IndexedDB database")
+          }
+          _this.db.onsuccess = function (event) {
+            console.log(event)
+          }
+          resolve(_this.db)
+        }
+      })
+    }
+    this._promise = promise()
+    return this
+  }
+  add(storeName) {
     let transaction = db.transaction([storeName], "readwrite")
     let store = transaction.objectStore(storeName)
   }

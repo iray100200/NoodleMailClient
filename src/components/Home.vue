@@ -209,15 +209,7 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
-    <Modal v-model="create_modal" width="80%" :styles="{ top: '6.4vh' }">
-      <p slot="header" class="n-center n-create-modal">
-        <label class="n-title">新邮件</label>
-      </p>
-      <New />
-      <div slot="footer">
-          <Button type="error" size="large" long :loading="modal_loading" @click="del">Delete</Button>
-      </div>
-    </Modal>
+    
   </div>
 </template>
 

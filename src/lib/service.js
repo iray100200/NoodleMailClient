@@ -1,11 +1,16 @@
 import NoodleDB from './database'
 
+let dbInstance;
+
+export const installDB = (stories) => {
+  if (!dbInstance) dbInstance = new NoodleDB()
+  dbInstance.connect('noodle', 1)
+  dbInstance.install(stories)
+}
+
 export const fetchDB = (target /* Todo */) => {
-  return new Promise((resolve) => {
-    let dbInstance = new NoodleDB()
-    dbInstance.connect('noodle', 1)
-    dbInstance.install([{ name: target, keyPath: 'uid' }])
-    dbInstance.open(target).then(db => {
+  return new Promise(async (resolve) => {
+    dbInstance.subscribe((db) => {
       let transaction = db.transaction([target], "readonly")
       let store = transaction.objectStore(target)
       store.getAll().onsuccess = function (e) {

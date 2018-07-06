@@ -1,9 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { fetchDB, updateDB, login, fetchList, fetchDetails, markSeen } from './service'
+import { installDB, fetchDB, updateDB, login, fetchList, fetchDetails, markSeen } from './service'
 import { sort, isunseen } from './utils'
 
 Vue.use(Vuex)
+
+installDB([
+  {
+    name: 'inbox',
+    keyPath: 'uid'
+  },
+  {
+    name: 'sent',
+    keyPath: 'uid'
+  }
+])
 
 const state = {
   accounts: [],
@@ -85,7 +96,7 @@ const actions = {
     commit('setCurrent', value)
   },
   fetchMailListAsync({ commit }, value) {
-    function commitFetch(uuid, target) {
+    function commitFetch(target, uuid) {
       return (list, statusCode) => {
         return commit('fetch', {
           target,
@@ -100,14 +111,15 @@ const actions = {
     (async () => {
       let { target } = value
       try {
-        let fetchDBResult = await fetchDB(target)
+        let fetchDBResult = await fetchDB(target), temp
+        commitFetch(target)(temp = fetchDBResult.result.map(m => m.data), 'success')
         let loginResult = await login()
         let addlist = [], removeList = [], mailList = []
         if (loginResult instanceof Error || loginResult.error) {
-          mailList = fetchDBResult.result.map(m => m.data)
-          return commitFetch()(mailList, 'error')
+          mailList = temp
+          return commitFetch(target)(mailList, 'error')
         }
-        let commitFetchLoginResult = commitFetch(loginResult.uuid, target)
+        let commitFetchLoginResult = commitFetch(target, loginResult.uuid)
         let fetchListResult = await fetchList(loginResult.uuid, target)
         if (fetchDBResult.result && fetchDBResult.result.length > 0) {
           fetchDBResult.result.forEach(f => {
@@ -130,8 +142,8 @@ const actions = {
           addlist = fetchListResult.result
         }
         let fetchDetailsResult = await fetchDetails(loginResult.uuid, addlist)
-        let transaction = fetchDBResult.db.transaction(['mails'], "readwrite")
-        let store = transaction.objectStore('mails')
+        let transaction = fetchDBResult.db.transaction([target], "readwrite")
+        let store = transaction.objectStore(target)
         for (var r in fetchDetailsResult.result) {
           let o = fetchDetailsResult.result[r]
           mailList.push(o)
