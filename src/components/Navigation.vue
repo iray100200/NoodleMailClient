@@ -10,11 +10,11 @@
             <Icon type="ios-person-outline" size="25"></Icon>
           </span>
         </router-link>
-        <router-link title="新邮件" tag="li" to="/mail/inbox">
+        <li title="新邮件" @click="createNew">
           <span class="n-icon n-vh-center">
             <Icon type="ios-plus-outline" size="24"></Icon>
           </span>
-        </router-link>
+        </li>
         <router-link title="收件箱" tag="li" to="/mail/inbox">
           <span class="n-icon n-vh-center">
             <Icon type="ios-email-outline" size="24"></Icon>
@@ -71,8 +71,8 @@
       return {}
     },
     methods: {
-      inbox() {
-        this.$emit('inbox')
+      createNew() {
+        this.$emit('new')
       }
     }
   }

@@ -154,10 +154,16 @@
       }
     }
   }
+  .n-create-modal {
+    .n-title {
+      font-size: 1.12em;
+      color: #444693;
+    }
+  }
 </style>
 <template>
   <div class="n-home n-flex">
-    <Navigation v-on:inbox="getInbox()"></Navigation>
+    <Navigation v-on:new="create"></Navigation>
     <div class="n-overflow-y n-list-cont n-flex n-align-v">
       <div class="n-filter-cont">
         <div class="n-filter n-flex">
@@ -203,6 +209,15 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
+    <Modal v-model="create_modal" width="80%" :styles="{ top: '6.4vh' }">
+      <p slot="header" class="n-center n-create-modal">
+        <label class="n-title">新邮件</label>
+      </p>
+      <New />
+      <div slot="footer">
+          <Button type="error" size="large" long :loading="modal_loading" @click="del">Delete</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -219,10 +234,12 @@
   import base from "../lib/base";
   import Navigation from './Navigation'
   import Filtering from '../shared/Filter'
+  import New from './New'
   export default {
     components: {
       Navigation,
-      Filtering
+      Filtering,
+      New
     },
     computed: {
       ...mapState({
@@ -268,6 +285,9 @@
       },
       decodeId(id) {
         return parseInt(String(id), '36') || null
+      },
+      create() {
+        this.create_modal = true
       },
       dateNormalize
     },
