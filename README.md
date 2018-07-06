@@ -4,7 +4,7 @@
 
 - BASED ON Vuex
 
-- How to start
+- BASED ON IView UI
 
 Installation
 ============
@@ -15,5 +15,8 @@ Start a server listening on port 8080
 ============
 
     npm start
+
+Sceenshot
+============
 
 ![image](./static/capture.png)
