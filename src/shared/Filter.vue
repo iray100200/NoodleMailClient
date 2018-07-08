@@ -32,20 +32,30 @@
 </style>
 <template>
   <div class="n-input-cont n-v-center">
-    <span class="n-flex n-vh-center n-filter-icon n-link">
+    <span class="n-flex n-vh-center n-filter-icon n-link" @click="setting">
       <Icon type="ios-settings-strong"></Icon>
     </span>
-    <span class="n-flex n-vh-center n-filter-icon n-link">
+    <span class="n-flex n-vh-center n-filter-icon n-link" @click="refresh">
       <Icon type="ios-loop-strong"></Icon>
     </span>
     <input type="text" placeholder="搜索" />
-    <span class="n-flex n-vh-center n-search-icon n-link">
+    <span class="n-flex n-vh-center n-search-icon n-link" @click="search">
       <Icon type="ios-search-strong"></Icon>
     </span>
   </div>
 </template>
 <script>
   export default {
-
+    methods: {
+      setting() {
+        this.$emit('setting')
+      },
+      refresh() {
+        this.$emit('refresh')
+      },
+      search() {
+        this.$emit('search')
+      }
+    }
   }
 </script>
