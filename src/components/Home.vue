@@ -209,7 +209,15 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
-    
+    <Modal v-model="create_modal" width="80%" :styles="{ top: '6.4vh' }">
+      <p slot="header" class="n-center n-create-modal">
+        <label class="n-title">新邮件</label>
+      </p>
+      <New />
+      <div slot="footer">
+        <Button type="error" size="large" @click="del">Delete</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -281,6 +289,9 @@
       create() {
         this.create_modal = true
       },
+      del() {
+
+      },
       dateNormalize
     },
     mixins: [base],
@@ -294,7 +305,8 @@
         mails: [],
         mailTemps: Array.apply(this, {
           length: Math.floor((document.documentElement.clientHeight - 60) / 80)
-        }).map(() => 0)
+        }).map(() => 0),
+        create_modal: false
       }
     },
     mounted() {
