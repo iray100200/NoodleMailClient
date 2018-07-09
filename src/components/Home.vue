@@ -45,6 +45,9 @@
         height: 32px;
       }
     }
+    .loading-bar {
+      /* LOADING BAR */
+    }
     .mail-item-cont {
       position: relative;
       &:first-child {
@@ -173,6 +176,9 @@
         </div>
       </div>
       <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
+        <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
+          <Spin></Spin>
+        </li>
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
@@ -245,7 +251,8 @@
       ...mapState({
         status: state => state.mailsys.status,
         hoveredIndex: state => state.mailsys.hoveredIndex,
-        selectedIndex: state => state.mailsys.selectedIndex
+        selectedIndex: state => state.mailsys.selectedIndex,
+        isLoading: state => state.mailsys.isLoading
       }),
       ...mapGetters({
         parse: 'mailsys/parse',
@@ -344,7 +351,7 @@
       let { id, target } = this.$route.params
       this.currentId = id
       this.targetName = target
-      this.fetchMailListAsync({ target })
+      this.fetchMailListAsync({ target, showState: true })
     },
     updated() {},
     beforeUpdate() {}

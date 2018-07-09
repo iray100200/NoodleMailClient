@@ -122,7 +122,7 @@
     },
     watch: {
       current(to, from) {
-        if (to) this.begin()
+        if ((to && !from) || to.attributes.uid != from.attributes.uid) this.begin()
       }
     },
     methods: {

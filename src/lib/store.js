@@ -50,6 +50,9 @@ const mutations = {
     state.uuid = uuid
     state.status = status
   },
+  loading(state, payload) {
+    state.isLoading = payload
+  },
   markSeen(state, payload) {
     state.mails = { ...payload }
   },
@@ -109,14 +112,16 @@ const actions = {
       }
     }
     (async () => {
-      let { target } = value
+      let { target, showState } = value
       try {
         let fetchDBResult = await fetchDB(target), temp
         commitFetch(target)(temp = fetchDBResult.result.map(m => m.data), 'success')
+        if (showState) commit('loading', true)
         let loginResult = await login()
         let addlist = [], removeList = [], mailList = []
         if (loginResult instanceof Error || loginResult.error) {
           mailList = temp
+          if (showState) commit('loading', false)
           return commitFetch(target)(mailList, 'error')
         }
         let commitFetchLoginResult = commitFetch(target, loginResult.uuid)
@@ -154,6 +159,7 @@ const actions = {
         }
         removeList.forEach(a => store.delete(a))
         commitFetchLoginResult(mailList, 'success')
+        if (showState) commit('loading', false)
       } catch (e) {
         console.log(e)
       }
