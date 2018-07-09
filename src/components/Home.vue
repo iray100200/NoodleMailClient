@@ -46,7 +46,7 @@
       }
     }
     .loading-bar {
-      /* LOADING BAR */
+      height: 28px;
     }
     .mail-item-cont {
       position: relative;
@@ -163,6 +163,30 @@
       color: #444693;
     }
   }
+  .fade-enter-active {
+    animation-name: fade-in;
+    animation-duration: .5s;
+  }
+  .fade-leave-active {
+    animation-name: fade-out;
+    animation-duration: .25s;
+  }
+  @keyframes fade-in {
+    from {
+      height: 0;
+    }
+    to {
+      height: 28px;
+    }
+  }
+  @keyframes fade-out {
+    from {
+      height: 28px;
+    }
+    to {
+      height: 0;
+    }
+  }
 </style>
 <template>
   <div class="n-home n-flex">
@@ -171,14 +195,16 @@
       <div class="n-filter-cont">
         <div class="n-filter n-flex">
           <span style="flex: 1">
-            <Filtering />
+            <Filtering v-on:refresh="refresh" />
           </span>
         </div>
       </div>
       <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
-        <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
-          <Spin></Spin>
-        </li>
+        <transition name="fade">
+          <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
+            <Spin></Spin>
+          </li>
+        </transition>
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
           <div class="mail-item mail-temp n-loading"></div>
         </li>
@@ -299,6 +325,9 @@
       del() {
 
       },
+      refresh() {
+        this.fetchMailListAsync({ target: this.targetName, showState: true })
+      },
       dateNormalize
     },
     mixins: [base],
@@ -343,7 +372,7 @@
         if (current) this.setCurrent(current)
         if ((this.targetName !== target)) {
           this.targetName = target
-          this.fetchMailListAsync({ target })
+          this.fetchMailListAsync({ target, showState: true })
         }
       }
     },
