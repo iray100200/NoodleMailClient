@@ -46,8 +46,10 @@
       }
     }
     .loading-bar {
-      height: 28px;
-      margin: 0!important;
+      height: 36px;
+      overflow: hidden;
+      margin: 0 0 -8px!important;
+      padding-bottom: 8px;
     }
     .mail-item-cont {
       position: relative;
@@ -171,23 +173,27 @@
   }
   .fade-leave-active {
     animation-name: fade-out;
-    animation-duration: .2s;
-    animation-timing-function: ease-in;
+    animation-duration: .3s;
+    animation-timing-function: ease-out;
   }
   @keyframes fade-in {
     from {
       height: 0;
+      padding-bottom: 0;
     }
     to {
-      height: 30px;
+      height: 36px;
+      padding-bottom: 8px;
     }
   }
   @keyframes fade-out {
     from {
-      height: 30px;
+      height: 36px;
+      padding-bottom: 8px;
     }
     to {
       height: 0;
+      padding-bottom: 0;
     }
   }
   .loader {
