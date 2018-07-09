@@ -47,6 +47,7 @@
     }
     .loading-bar {
       height: 28px;
+      margin: 0!important;
     }
     .mail-item-cont {
       position: relative;
@@ -165,26 +166,88 @@
   }
   .fade-enter-active {
     animation-name: fade-in;
-    animation-duration: .5s;
+    animation-duration: .3s;
+    animation-timing-function: ease-out;
   }
   .fade-leave-active {
     animation-name: fade-out;
-    animation-duration: .25s;
+    animation-duration: .2s;
+    animation-timing-function: ease-in;
   }
   @keyframes fade-in {
     from {
       height: 0;
     }
     to {
-      height: 28px;
+      height: 30px;
     }
   }
   @keyframes fade-out {
     from {
-      height: 28px;
+      height: 30px;
     }
     to {
       height: 0;
+    }
+  }
+  .loader {
+    width: 28px;
+    height: 28px;
+    position: relative;
+  }
+  .circular {
+    -webkit-animation: rotate 2s linear infinite;
+    animation: rotate 2s linear infinite;
+    height: 100%;
+    -webkit-transform-origin: center center;
+    transform-origin: center center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto
+  }
+  .path {
+    stroke-dasharray: 1,200;
+    stroke-dashoffset: 0;
+    -webkit-animation: dash 1.5s ease-in-out infinite,color 6s ease-in-out infinite;
+    animation: dash 1.5s ease-in-out infinite,color 6s ease-in-out infinite;
+    stroke-linecap: round
+  }
+  @keyframes color {
+    0%, to {
+      stroke: #d62d20
+    }
+    40% {
+      stroke: #0057e7
+    }
+    66% {
+      stroke: #008744
+    }
+    80%,90% {
+      stroke: #ffa700
+    }
+  }
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1,200;
+      stroke-dashoffset: 0
+    }
+    50% {
+      stroke-dasharray: 89,200;
+      stroke-dashoffset: -35
+    }
+    to {
+      stroke-dasharray: 89,200;
+      stroke-dashoffset: -124
+    }
+  }
+  @keyframes rotate {
+    to {
+      -webkit-transform: rotate(1turn);
+      transform: rotate(1turn)
     }
   }
 </style>
@@ -202,7 +265,13 @@
       <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
         <transition name="fade">
           <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
-            <Spin></Spin>
+            <Spin>
+              <div class="loader">
+                <svg class="circular" viewBox="25 25 50 50">
+                  <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+                </svg>
+              </div>
+            </Spin>
           </li>
         </transition>
         <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">

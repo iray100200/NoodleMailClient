@@ -74,8 +74,9 @@ const mutations = {
 const actions = {
   markSeen({ state, commit }, value) {
     (async () => {
-      let uid = value.attributes.uid
-      let item = state.mails.data.find(f => {
+      let { data, target } = value
+      let uid = data.attributes.uid
+      let item = state.mails[target.toLowerCase()].data.find(f => {
         return f.attributes.uid === uid
       })
       if (item) {

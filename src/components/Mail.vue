@@ -142,7 +142,7 @@
       begin() {
         this.$Loading.start()
         if (this.$refs.frameBody) this.$refs.frameBody.scrollTop = 0
-        if (isunseen(this.current)) this.markSeen(this.current)
+        if (isunseen(this.current)) this.markSeen({ data: this.current, target: 'inbox' })
       },
       frameLoad(e) {
         let obj = e.target
