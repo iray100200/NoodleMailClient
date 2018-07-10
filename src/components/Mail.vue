@@ -1,63 +1,5 @@
-<style lang="scss">
-  .n-html-cont {
-     ::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
-      background: #eee;
-    }
-     ::-webkit-scrollbar-thumb {
-      background: #808080;
-    }
-    .n-frame-head {
-      box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
-      position: relative;
-      z-index: 10;
-    }
-    .n-subject {
-      flex: 1;
-      padding: 24px 36px 16px;
-      background-color: #f6f5ec;
-    }
-    .n-c-from {
-      padding: 4px 36px 4px;
-      color: #ccf;
-      background-color: #444693;
-    }
-    .n-infos {
-      margin-left: 8px;
-      font-size: 1.2em;
-      flex: 1;
-    }
-    .n-actions {
-      > span {
-        margin: 0 4px;
-        width: 32px;
-        height: 32px;
-      }
-      .n-icon {
-        font-size: 20px;
-      }
-    }
-    .n-tag {
-      padding: 0 8px;
-      font-size: 0.9em;
-      color: #999ddc;
-      font-size: 14px;
-    }
-    .n-frame-container {
-      flex: 1;
-      position: relative;
-    }
-    .n-frame-body {
-      overflow: auto;
-      padding: 28px 36px;
-      width: 100%;
-      height: 100%;
-    }
-  }
-</style>
 <template>
-  <div class="n-html-cont n-overflow-h n-flex n-align-v">
+  <div class="n-mail n-overflow-h n-flex n-align-v">
     <div class="n-frame-head">
       <div v-if="current">
         <div class="n-align-v">
@@ -104,6 +46,7 @@
   </div>
 </template>
 <script>
+  import '../scss/mail.scss'
   import { isunseen } from '../lib/utils'
   import {
     mapState,
