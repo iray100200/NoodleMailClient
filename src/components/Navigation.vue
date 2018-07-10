@@ -1,6 +1,6 @@
 <template>
   <div class="n-navigation">
-    <div class="n-logo-cont n-vh-center">
+    <div class="n-logo-cont n-vh-center" @click="expandOrNot">
       <Icon type="ios-drag" size="24"></Icon>
     </div>
     <div class="n-nav-cont">
@@ -73,6 +73,9 @@
     methods: {
       createNew() {
         this.$emit('new')
+      },
+      expandOrNot() {
+        
       }
     }
   }
