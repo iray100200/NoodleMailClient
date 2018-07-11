@@ -1,7 +1,7 @@
 <style>
   .n-input-cont {
     background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+    border-radius: 2px;
     height: 30px;
   }
   input {
