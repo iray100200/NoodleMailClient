@@ -1,22 +1,21 @@
 <style>
   .n-markup-input {
-    border-bottom: 1px solid #e0e0ec;
-    padding: 8px 12px 2px 0;
-    line-height: 24px;
-    height: 24px;
-    font-size: 13px;
+    padding: 4px 0 4px 0;
+    font-size: 12px;
+    height: 32px;
     color: #464547;
+    margin: 2px 0;
     box-sizing: content-box;
   }
 
-  .n-markup-input .n-label-container:after {
-    content: ':'
-  }
-
   .n-markup-input .n-label {
-    width: 52px;
+    min-width: 40px;
     height: 100%;
     text-align: justify;
+    line-height: 32px;
+    margin-right: 12px;
+    font-size: 13px;
+    font-weight: bold;
   }
 
   .n-markup-input .n-label i {
@@ -24,13 +23,11 @@
     width: 100%;
   }
 
-  .n-markup-input .n-tag {
-    margin: 0 4px;
-  }
-
   .n-markup-input .n-input-container {
     flex: 1;
     height: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
   }
 
   .n-markup-input .n-input-container .n-input {
@@ -39,21 +36,20 @@
     width: 100%;
     height: 100%;
     padding: 0 0 0 8px;
-    font-size: 13px;
+    font-size: 12px;
     color: #464547;
   }
 </style>
 <template>
   <div class="n-markup-input n-v-center">
     <div class="n-label">{{label}}<i></i></div>
-    <div class="n-tag">:</div>
-    <div class="n-input-container">
-      <input class="n-input" v-bind:placeholder="placeholder" type="text" />
+    <div class="n-input-container n-v-center">
+      <input class="n-input" v-bind:placeholder="placeholder" v-bind:value="value" type="text" v-bind:disabled="disabled" />
     </div>
   </div>
 </template>
 <script>
   export default {
-    props: ['label', 'placeholder']
+    props: ['label', 'placeholder', 'value', 'disabled']
   }
 </script>
