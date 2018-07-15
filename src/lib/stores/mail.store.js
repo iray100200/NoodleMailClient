@@ -116,7 +116,7 @@ const actions = {
         if (showState) commit('loading', true)
         let loginResult = await login()
         let addlist = [], removeList = [], mailList = []
-        if (loginResult instanceof Error || loginResult.error) {
+        if (loginResult instanceof Error || loginResult.error || loginResult.errorno || !loginResult.uuid) {
           mailList = temp
           if (showState) commit('loading', false)
           return commitFetch(target)(mailList, 'error')

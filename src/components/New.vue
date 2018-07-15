@@ -14,6 +14,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    margin: 12px;
     .ql-snow {
       border: 0;
     }
