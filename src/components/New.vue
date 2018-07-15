@@ -5,7 +5,7 @@
     flex-direction: column;
   }
   .input-cont {
-    padding: 0 12px 0 12px;
+    padding: 0;
   }
   .qeditor-cont {
     flex: 1;
@@ -14,7 +14,6 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    margin: 12px;
     .ql-snow {
       border: 0;
     }
@@ -29,7 +28,6 @@
 <template>
   <div class="n-new">
     <div class="input-cont">
-      <MarkupInput label="发件人" value="iray100200@hotmail.com" disabled="true"></MarkupInput>
       <MarkupInput label="收件人" placeholder="请输入或从通讯录选择"></MarkupInput>
       <MarkupInput label="主题" placeholder="请输入"></MarkupInput>
     </div>

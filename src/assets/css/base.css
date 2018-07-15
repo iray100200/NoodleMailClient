@@ -2,12 +2,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'),
-    local('MaterialIcons-Regular'),
-    url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
-    url(../fonts/MaterialIcons-Regular.woff) format('woff'),
-    url(../fonts/MaterialIcons-Regular.ttf) format('truetype'),
-    url(../fonts/MaterialIcons-Regular.eot) format('embedded-opentype');
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(../fonts/MaterialIcons-Regular.woff2) format('woff2'), url(../fonts/MaterialIcons-Regular.woff) format('woff'), url(../fonts/MaterialIcons-Regular.ttf) format('truetype'), url(../fonts/MaterialIcons-Regular.eot) format('embedded-opentype');
 }
 
 .material-icons {
@@ -29,76 +24,117 @@
   color: inherit;
 }
 
-.material-icons.md-16 { font-size: 16px; }
-.material-icons.md-18 { font-size: 18px; }
-.material-icons.md-20 { font-size: 20px; }
-.material-icons.md-24 { font-size: 24px; }
-.material-icons.md-28 { font-size: 27px; }
-.material-icons.md-32 { font-size: 30px; }
-.material-icons.md-36 { font-size: 36px; }
-.material-icons.md-42 { font-size: 42px; }
-.material-icons.md-48 { font-size: 48px; }
+.material-icons.md-16 {
+  font-size: 16px;
+}
+
+.material-icons.md-18 {
+  font-size: 18px;
+}
+
+.material-icons.md-20 {
+  font-size: 20px;
+}
+
+.material-icons.md-24 {
+  font-size: 24px;
+}
+
+.material-icons.md-28 {
+  font-size: 27px;
+}
+
+.material-icons.md-32 {
+  font-size: 30px;
+}
+
+.material-icons.md-36 {
+  font-size: 36px;
+}
+
+.material-icons.md-42 {
+  font-size: 42px;
+}
+
+.material-icons.md-48 {
+  font-size: 48px;
+}
 
 /* roboto-300 - latin */
+
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
-  src: url('../fonts/roboto-v18-latin-300.eot'); /* IE9 Compat Modes */
-  src: local('Roboto Light'), local('Roboto-Light'),
-       url('../fonts/roboto-v18-latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/roboto-v18-latin-300.woff2') format('woff2'), /* Super Modern Browsers */
-       url('../fonts/roboto-v18-latin-300.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/roboto-v18-latin-300.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/roboto-v18-latin-300.svg#Roboto') format('svg'); /* Legacy iOS */
+  src: url('../fonts/roboto-v18-latin-300.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto Light'), local('Roboto-Light'), url('../fonts/roboto-v18-latin-300.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/roboto-v18-latin-300.woff2') format('woff2'), /* Super Modern Browsers */
+  url('../fonts/roboto-v18-latin-300.woff') format('woff'), /* Modern Browsers */
+  url('../fonts/roboto-v18-latin-300.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('../fonts/roboto-v18-latin-300.svg#Roboto') format('svg');
+  /* Legacy iOS */
 }
+
 /* roboto-regular - latin */
+
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  src: url('../fonts/roboto-v18-latin-regular.eot'); /* IE9 Compat Modes */
-  src: local('Roboto'), local('Roboto-Regular'),
-       url('../fonts/roboto-v18-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('../fonts/roboto-v18-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-       url('../fonts/roboto-v18-latin-regular.woff') format('woff'), /* Modern Browsers */
-       url('../fonts/roboto-v18-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('../fonts/roboto-v18-latin-regular.svg#Roboto') format('svg'); /* Legacy iOS */
+  src: url('../fonts/roboto-v18-latin-regular.eot');
+  /* IE9 Compat Modes */
+  src: local('Roboto'), local('Roboto-Regular'), url('../fonts/roboto-v18-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/roboto-v18-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+  url('../fonts/roboto-v18-latin-regular.woff') format('woff'), /* Modern Browsers */
+  url('../fonts/roboto-v18-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('../fonts/roboto-v18-latin-regular.svg#Roboto') format('svg');
+  /* Legacy iOS */
 }
 
 * {
   box-sizing: border-box;
 }
-html, body {
+
+html,
+body {
   height: 100%;
   margin: 0;
-  font-family: 'Roboto', "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif!important;
+  font-family: 'Roboto', "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif !important;
 }
+
 li {
   list-style: none;
 }
+
 .n-flex {
   display: flex;
 }
+
 .n-flex-inline {
   display: inline-flex;
 }
+
 .n-v-center {
   display: flex;
   align-items: center;
 }
+
 .n-h-center {
   display: flex;
   justify-content: center;
 }
+
 .n-vh-center {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .n-center {
   text-align: center;
 }
+
 .n-center:after {
   content: '';
   display: inline-block;
@@ -106,46 +142,75 @@ li {
   height: 100%;
   vertical-align: middle;
 }
+
 .n-align-h {
   flex-direction: row;
 }
+
 .n-align-v {
   flex-direction: column;
 }
+
 .n-overflow {
   overflow: auto;
 }
+
 .n-overflow-x {
   overflow-x: auto;
 }
+
 .n-overflow-y {
   overflow-y: auto;
 }
+
 .n-overflow-h::-webkit-scrollbar-thumb {
-  background: transparent!important;
+  background: transparent !important;
 }
+
 .n-icon {
   font-size: 16px;
 }
+
 .n-link {
   cursor: pointer;
 }
+
 .n-link:hover {
   color: #fffffb;
 }
+
 .n-clickable {
   padding: 0 6px;
   border-radius: 4px;
   transition: 0.3s color;
 }
+
 .n-hoverable:hover {
   color: #fffffb;
 }
+
 .n-clickable {
   padding: 0 6px;
   border-radius: 50%;
   cursor: pointer;
 }
+
 .n-clickable:hover {
   color: #fffffb;
+}
+
+.ivu-modal-content {
+  border-radius: 2px !important;
+  box-shadow: 0 0 8px rgba(120, 120, 200, 0.4);
+}
+
+.ivu-modal-header {
+  background-color: #444693 !important;
+  color: #afb4db !important;
+  height: 48px;
+  border-bottom: 0;
+}
+
+.ivu-modal-body {
+  padding: 0;
 }

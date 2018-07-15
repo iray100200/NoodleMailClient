@@ -1,4 +1,4 @@
-<style scoped>
+<style>
   .fade-enter-active {
     animation-name: fade-in;
     animation-duration: .3s;
@@ -147,8 +147,11 @@
       <router-view></router-view>
     </div>
     <Modal v-model="create_modal" width="80%" :styles="{ top: '6.4vh' }">
-      <p slot="header" class="n-center n-create-modal">
-        <label class="n-title">新邮件</label>
+      <p slot="header" class="n-create-modal n-v-center">
+        <label class="n-title n-v-center">
+          <Icon type="compose" size="20"></Icon>&nbsp;&nbsp;
+          新邮件
+        </label>
       </p>
       <New />
       <div slot="footer">

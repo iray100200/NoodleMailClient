@@ -1,11 +1,12 @@
 <style>
   .n-markup-input {
-    padding: 4px 0 4px 0;
+    padding: 2px 16px;
     font-size: 12px;
     height: 32px;
     color: #464547;
-    margin: 2px 0;
+    margin: 0;
     box-sizing: content-box;
+    border-bottom: 1px solid #e3e7e4;
   }
 
   .n-markup-input .n-label {
@@ -26,7 +27,6 @@
   .n-markup-input .n-input-container {
     flex: 1;
     height: 100%;
-    border: 1px solid #e0e0e0;
     border-radius: 2px;
   }
 
