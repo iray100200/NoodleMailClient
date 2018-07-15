@@ -6,7 +6,7 @@
     color: #464547;
     margin: 0;
     box-sizing: content-box;
-    border-bottom: 1px solid #e3e7e4;
+    border-bottom: 1px solid #eee;
   }
 
   .n-markup-input .n-label {

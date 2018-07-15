@@ -146,7 +146,7 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
-    <Modal v-model="create_modal" width="80%" :styles="{ top: '6.4vh' }">
+    <Modal v-model="create_modal" :mask-closable="false" transition-names="[]" width="80%" :styles="{ top: '6.4vh' }">
       <p slot="header" class="n-create-modal n-v-center">
         <label class="n-title n-v-center">
           <Icon type="compose" size="20"></Icon>&nbsp;&nbsp;

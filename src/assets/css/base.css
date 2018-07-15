@@ -201,16 +201,32 @@ li {
 
 .ivu-modal-content {
   border-radius: 2px !important;
-  box-shadow: 0 0 8px rgba(120, 120, 200, 0.4);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.75) !important;
+  overflow: hidden !important;
 }
 
 .ivu-modal-header {
   background-color: #444693 !important;
   color: #afb4db !important;
-  height: 48px;
-  border-bottom: 0;
+  height: 48px !important;
+  border-bottom: 0 !important;
 }
 
 .ivu-modal-body {
-  padding: 0;
+  padding: 0 !important;
+}
+
+.ivu-modal-close {
+  right: 8px !important;
+}
+
+.ivu-icon-ios-close-empty {
+  width: 32px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.ivu-icon-ios-close-empty:hover {
+  color: #fffffb !important;
 }

@@ -20,9 +20,6 @@
     .ql-toolbar.ql-snow {
       background: #eee;
     }
-    .ql-container.ql-snow {
-      margin: 0 4px;
-    }
   }
 </style>
 <template>
