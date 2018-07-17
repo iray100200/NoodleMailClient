@@ -146,7 +146,7 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
-    <Modal v-model="create_modal" :mask-closable="false" transition-names="[]" width="80%" :styles="{ top: '6.4vh' }">
+    <Modal v-model="create_modal" :mask-closable="false" width="80%" :styles="{ top: '6.4vh' }">
       <p slot="header" class="n-create-modal n-v-center">
         <label class="n-title n-v-center">
           <Icon type="compose" size="20"></Icon>&nbsp;&nbsp;
@@ -260,6 +260,7 @@
     },
     mounted() {
       this.$store.subscribe(function(mutation, state) {
+        console.log(mutation.type)
         if (mutation.type === 'mailsys/fetch' && state.mailsys.status.code === 'error') {
           this.$Notice.error({
             title: '状态提醒',
@@ -272,6 +273,9 @@
           /* Load the current at the first loading time */
           /* Then, Has a better way? */
           if (current) this.setCurrent(current)
+        }
+        if (mutation.type === 'mailsys/markSeen') {
+          this.mails = this.get(this.targetName)
         }
       }.bind(this))
     },

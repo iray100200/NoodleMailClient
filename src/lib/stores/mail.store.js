@@ -50,7 +50,7 @@ const mutations = {
     state.isLoading = payload
   },
   markSeen(state, payload) {
-    state.mails = { ...payload }
+    state.mails.inbox = { ...payload }
   },
   setFrame(state, payload) {
     state.isLoading = payload.isLoading
@@ -77,9 +77,9 @@ const actions = {
       })
       if (item) {
         item.attributes.flags = ['\\Seen']
-        updateDB(uid, item)
+        updateDB(target, uid, item)
       }
-      commit('markSeen', state.mails)
+      commit('markSeen', state.mails.inbox)
       await markSeen(state.uuid, uid)
     })()
   },

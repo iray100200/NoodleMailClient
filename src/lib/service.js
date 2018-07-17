@@ -21,9 +21,7 @@ export const fetchDB = (target /* Todo */) => {
 }
 
 export const updateDB = (target, uid, data) => {
-  let dbInstance = new NoodleDB()
-  dbInstance.connect('noodle', 1)
-  dbInstance.open(target).then(db => {
+  dbInstance.subscribe(db => {
     let transaction = db.transaction([target], "readwrite")
     let store = transaction.objectStore(target)
     let req = store.openCursor()
