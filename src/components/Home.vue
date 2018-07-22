@@ -146,18 +146,7 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
-    <Modal v-model="create_modal" :mask-closable="false" width="80%" :styles="{ top: '6.4vh' }">
-      <p slot="header" class="n-create-modal n-v-center">
-        <label class="n-title n-v-center">
-          <Icon type="compose" size="20"></Icon>&nbsp;&nbsp;
-          新邮件
-        </label>
-      </p>
-      <New />
-      <div slot="footer">
-        <Button type="error" size="large" @click="del">Delete</Button>
-      </div>
-    </Modal>
+    <NewModal v-bind:visible="isNewModalVisible" @close="onNewModalVisibleChange"></NewModal>
   </div>
 </template>
 
@@ -175,12 +164,12 @@
   import base from "../lib/base";
   import Navigation from './Navigation'
   import Filtering from '../shared/Filter'
-  import New from './New'
+  import NewModal from './NewModal'
   export default {
     components: {
       Navigation,
       Filtering,
-      New
+      NewModal
     },
     computed: {
       ...mapState({
@@ -231,9 +220,10 @@
         return parseInt(String(id), '36') || null
       },
       create() {
-        this.create_modal = true
+        this.isNewModalVisible = true
       },
-      del() {
+      onNewModalVisibleChange(val) {
+        this.isNewModalVisible = val
       },
       refresh() {
         this.fetchMailListAsync({
@@ -255,7 +245,7 @@
         mailTemps: Array.apply(this, {
           length: Math.floor((document.documentElement.clientHeight - 60) / 80)
         }).map(() => 0),
-        create_modal: false
+        isNewModalVisible: false
       }
     },
     mounted() {
