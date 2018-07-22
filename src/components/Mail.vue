@@ -40,7 +40,7 @@
     </div>
     <div class="n-frame-container n-flex">
       <div class="n-frame-body" ref="frameBody">
-        <iframe v-on:load="frameLoad" width="100%" marginheight="20" frameborder="0" scrolling="no" v-bind:srcdoc="html(current)"></iframe>
+        <iframe v-on:load="frameLoad" width="100%" frameborder="0" scrolling="no" v-bind:srcdoc="html(current)"></iframe>
       </div>
     </div>
   </div>
@@ -89,7 +89,7 @@
       },
       frameLoad(e) {
         let obj = e.target
-        obj.height = obj.contentDocument.body.scrollHeight + 'px'
+        obj.height = (obj.contentDocument.body.scrollHeight + 20) + 'px'
         obj.width = obj.contentDocument.body.scrollWidth + 'px'
         this.$Loading.finish()
       }
