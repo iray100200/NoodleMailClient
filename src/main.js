@@ -7,10 +7,22 @@ import store from './lib/store'
 import './lib/prototype'
 import './assets/css/base.css'
 import iView from 'iview'
+import vuescroll from 'vuescroll'
+import 'vuescroll/dist/vuescroll.css'
 import 'iview/dist/styles/iview.css'
 
 Vue.config.productionTip = false
 Vue.use(iView)
+Vue.use(vuescroll)
+
+Vue.prototype.$vuescrollConfig = {
+  scrollPanel: {
+    scrollingX: false
+  },
+  rail: {
+    size: '3px'
+  }
+}
 
 iView.LoadingBar.config({
   color: '#009ad6',

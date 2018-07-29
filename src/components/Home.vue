@@ -99,49 +99,53 @@
       <div class="n-filter-cont">
         <div class="n-filter n-flex">
           <span style="flex: 1">
-              <Filtering v-on:refresh="refresh" />
-            </span>
+                <Filtering v-on:refresh="refresh" />
+              </span>
         </div>
       </div>
-      <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
-        <transition name="fade">
-          <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
-            <Spin>
-              <div class="loader">
-                <svg class="circular" viewBox="25 25 50 50">
-                    <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
-                  </svg>
+      <div class="n-ul-cont">
+        <vue-scroll>
+          <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
+            <transition name="fade">
+              <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
+                <Spin>
+                  <div class="loader">
+                    <svg class="circular" viewBox="25 25 50 50">
+                        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="5" stroke-miterlimit="10"></circle>
+                      </svg>
+                  </div>
+                </Spin>
+              </li>
+            </transition>
+            <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
+              <div class="mail-item mail-temp n-loading"></div>
+            </li>
+            <li class="mail-item-cont active" v-for="(item, index) in mails" v-bind:class="{ 'selected' : encodeId(item.attributes.uid) === currentId }" v-on:click="route(item)" v-on:mouseenter="mouseenter($event, index)" v-on:mousemove="mousemove($event, index)"
+              v-on:mouseleave="mouseleave($event, index)">
+              <div class="mail-head mail-item-bg n-flex n-v-center" v-if="!!item && item.isunseen" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
+                <Icon type="ios-clock-outline" size="14.5"></Icon>
+                <label class="mail-head-date">{{dateNormalize(item.attributes.envelope.date)}}</label>
               </div>
-            </Spin>
-          </li>
-        </transition>
-        <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
-          <div class="mail-item mail-temp n-loading"></div>
-        </li>
-        <li class="mail-item-cont active" v-for="(item, index) in mails" v-bind:class="{ 'selected' : encodeId(item.attributes.uid) === currentId }" v-on:click="route(item)" v-on:mouseenter="mouseenter($event, index)" v-on:mousemove="mousemove($event, index)"
-          v-on:mouseleave="mouseleave($event, index)">
-          <div class="mail-head mail-item-bg n-flex n-v-center" v-if="!!item && item.isunseen" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
-            <Icon type="ios-clock-outline" size="14.5"></Icon>
-            <label class="mail-head-date">{{dateNormalize(item.attributes.envelope.date)}}</label>
-          </div>
-          <div class="mail-item mail-item-bg" v-bind:class="[item.isunseen ? 'n-unseen' : 'n-seen']" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
-            <div class="n-m-from n-flex" v-if="!!item">
-              <div class="n-avator-cont n-v-center">
-                <Badge dot v-bind:count="item.isunseen ? 1 : 0">
-                  <Avatar shape="square" style="background-color: #87d068" icon="person" />
-                </Badge>
+              <div class="mail-item mail-item-bg" v-bind:class="[item.isunseen ? 'n-unseen' : 'n-seen']" v-bind:style="{ backgroundPositionX: hoveredIndex === index ? positionX : start }">
+                <div class="n-m-from n-flex" v-if="!!item">
+                  <div class="n-avator-cont n-v-center">
+                    <Badge dot v-bind:count="item.isunseen ? 1 : 0">
+                      <Avatar shape="square" style="background-color: #87d068" icon="person" />
+                    </Badge>
+                  </div>
+                  <div class="n-h-center n-align-v">
+                    <p class="n-from-name">{{convertContactsToNames(item.attributes.envelope.from)}}</p>
+                    <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
+                  </div>
+                </div>
+                <div class="n-m-context" v-if="!!item">
+                  <div>{{item.attributes.envelope.subject}}</div>
+                </div>
               </div>
-              <div class="n-h-center n-align-v">
-                <p class="n-from-name">{{convertContactsToNames(item.attributes.envelope.from)}}</p>
-                <p class="n-date">{{new Date(item.attributes.date).format('yyyy/MM/dd hh:mm')}}</p>
-              </div>
-            </div>
-            <div class="n-m-context" v-if="!!item">
-              <div>{{item.attributes.envelope.subject}}</div>
-            </div>
-          </div>
-        </li>
-      </ul>
+            </li>
+          </ul>
+        </vue-scroll>
+      </div>
     </div>
     <div class="n-r-view">
       <router-view></router-view>
