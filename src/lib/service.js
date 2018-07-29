@@ -13,8 +13,15 @@ export const fetchDB = (target /* Todo */) => {
     dbInstance.subscribe((db) => {
       let transaction = db.transaction([target], "readonly")
       let store = transaction.objectStore(target)
-      store.getAll().onsuccess = function (e) {
-        resolve({ result: e.target.result, db })
+      let result = []
+      store.openCursor().onsuccess = function (event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          result.push(cursor.value)
+          cursor.continue()
+        } else {
+          resolve({ result, db })
+        }
       }
     })
   })
