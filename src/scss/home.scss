@@ -5,6 +5,9 @@
     background-color: #444693;
     position: relative;
     .n-ul-cont {
+      .n-ul {
+        padding-top: 4px;
+      }
       padding: 48px 0 0;
       overflow-y: hidden;
       flex: 1;

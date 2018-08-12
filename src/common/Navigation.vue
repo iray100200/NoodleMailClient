@@ -5,7 +5,7 @@
     </div>
     <div class="n-nav-cont">
       <ul>
-        <router-link title="关联账户" tag="li" to="/mail/inbox">
+        <router-link title="关联账户" tag="li" to="/account">
           <span class="n-icon n-vh-center">
               <Icon type="ios-person-outline" size="25"></Icon>
             </span>

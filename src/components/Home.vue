@@ -93,14 +93,13 @@
   }
 </style>
 <template>
-  <div class="n-home n-flex">
-    <Navigation v-on:new="create"></Navigation>
+  <Layout class="n-home n-flex">
     <div class="n-overflow-y n-list-cont n-flex n-align-v">
       <div class="n-filter-cont">
         <div class="n-filter n-flex">
           <span style="flex: 1">
-                <Filtering v-on:refresh="refresh" />
-              </span>
+            <Filtering v-on:refresh="refresh" />
+          </span>
         </div>
       </div>
       <div class="n-ul-cont">
@@ -150,8 +149,7 @@
     <div class="n-r-view">
       <router-view></router-view>
     </div>
-    <NewModal v-bind:visible="isNewModalVisible" @close="onNewModalVisibleChange"></NewModal>
-  </div>
+  </Layout>
 </template>
 
 <script>
@@ -166,14 +164,12 @@
     mapGetters
   } from 'vuex'
   import base from "../lib/base";
-  import Navigation from './Navigation'
+  import Layout from '../common/Layout'
   import Filtering from '../shared/Filter'
-  import NewModal from './NewModal'
   export default {
     components: {
-      Navigation,
-      Filtering,
-      NewModal
+      Layout,
+      Filtering
     },
     computed: {
       ...mapState({
@@ -223,12 +219,6 @@
       decodeId(id) {
         return parseInt(String(id), '36') || null
       },
-      create() {
-        this.isNewModalVisible = true
-      },
-      onNewModalVisibleChange(val) {
-        this.isNewModalVisible = val
-      },
       refresh() {
         this.fetchMailListAsync({
           target: this.targetName,
@@ -248,8 +238,7 @@
         mails: [],
         mailTemps: Array.apply(this, {
           length: Math.floor((document.documentElement.clientHeight - 60) / 80)
-        }).map(() => 0),
-        isNewModalVisible: false
+        }).map(() => 0)
       }
     },
     mounted() {

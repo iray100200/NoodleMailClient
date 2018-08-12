@@ -230,3 +230,7 @@ li {
 .ivu-icon-ios-close-empty:hover {
   color: #fffffb !important;
 }
+
+.layout-container {
+  height: 100%;
+}
