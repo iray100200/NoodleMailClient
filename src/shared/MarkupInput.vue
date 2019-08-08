@@ -10,7 +10,7 @@
   }
 
   .n-markup-input .n-label {
-    min-width: 40px;
+    min-width: 52px;
     height: 100%;
     text-align: justify;
     line-height: 32px;

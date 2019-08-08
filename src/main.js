@@ -20,7 +20,11 @@ Vue.prototype.$vuescrollConfig = {
     scrollingX: false
   },
   rail: {
-    size: '3px'
+    size: '4px'
+  },
+  bar: {
+    background: '#7B68EE',
+    size: '2px'
   }
 }
 
