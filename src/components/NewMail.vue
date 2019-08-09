@@ -3,13 +3,14 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 8px 20px;
+  padding: 8px 0 0 20px;
 }
 .input-cont {
   padding: 4px 0 0 0;
 }
 .qeditor-cont {
   flex: 1;
+  overflow: hidden;
 }
 .quill-editor {
   height: 100%;
@@ -18,6 +19,9 @@
   flex-direction: column;
   .ql-snow {
     border: 0;
+  }
+  .ql-container {
+    overflow: auto;
   }
   .ql-toolbar.ql-snow {
     background: #eee;
