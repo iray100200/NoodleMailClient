@@ -19,4 +19,4 @@ Start a server listening on port 8080
 Sceenshot
 ============
 
-![image](./static/capture.png)
+![image](./static/capture.PNG)
