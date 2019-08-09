@@ -49,6 +49,7 @@
   .n-frame-container {
     flex: 1;
     position: relative;
+    overflow: hidden;
   }
   .n-frame-body {
     overflow: auto;

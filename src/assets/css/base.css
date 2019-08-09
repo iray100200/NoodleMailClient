@@ -149,6 +149,7 @@ li {
 
 .n-align-v {
   flex-direction: column;
+  overflow: hidden;
 }
 
 .n-overflow {
