@@ -1,4 +1,5 @@
 import NoodleDB from './database'
+import { MAIL } from './constants'
 
 let dbInstance;
 
@@ -46,8 +47,8 @@ export const updateDB = (target, uid, data) => {
   })
 }
 
-export const login = () => {
-  return fetch('http://localhost:3000/imap/login', {
+export const auth = () => {
+  return fetch('http://localhost:3000/imap/auth', {
     method: 'POST',
     body: JSON.stringify({
       username: 'tb100200@outlook.com',
@@ -110,7 +111,7 @@ export const markSeen = (uuid, uid) => {
       'Content-Type': 'application/json'
     }),
     body: JSON.stringify({
-      flag: '\\Seen',
+      flag: MAIL.SEEN,
       uuid,
       uid
     })

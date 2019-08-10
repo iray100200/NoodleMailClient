@@ -1,4 +1,5 @@
 import nzhcn from "nzh/cn"
+import { MAIL } from './constants'
 
 export const sort = (data, key, type) => {
   let keys = key.split('.')
@@ -21,7 +22,7 @@ export const sort = (data, key, type) => {
 }
 
 export const isunseen = (item) => {
-  return typeof item === "object" && item.attributes.flags.indexOf('\\Seen') < 0
+  return typeof item === "object" && item.attributes.flags.indexOf(MAIL.SEEN) < 0
 }
 
 export const dateNormalize = (date) => {

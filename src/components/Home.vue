@@ -104,10 +104,10 @@
         </div>
       </div>
       <div class="n-ul-cont">
-        <vue-scroll>
+        <vue-scroll @handle-scroll="handleScrolling" ref="scroller">
           <ul class="n-ul" v-bind:class="{ 'n-overflow-h': !mails.length }">
             <transition name="fade">
-              <li class="loading-bar n-vh-center" v-if="mails.length > 0 && isLoading">
+              <li class="loading-bar n-vh-center" v-if="isLoadingTop">
                 <Spin>
                   <div class="loader">
                     <svg class="circular" viewBox="25 25 50 50">
@@ -125,9 +125,6 @@
                 </Spin>
               </li>
             </transition>
-            <li class="mail-item-cont" v-for="item in mailTemps" v-if="!mails.length">
-              <div class="mail-item mail-temp n-loading"></div>
-            </li>
             <li
               class="mail-item-cont active"
               v-for="(item, index) in mails"
@@ -136,6 +133,7 @@
               v-on:mouseenter="mouseenter($event, index)"
               v-on:mousemove="mousemove($event, index)"
               v-on:mouseleave="mouseleave($event, index)"
+              v-bind:key="index"
             >
               <div
                 class="mail-head mail-item-bg n-flex n-v-center"
@@ -166,6 +164,25 @@
                 </div>
               </div>
             </li>
+            <transition name="fade">
+              <li class="loading-bar n-vh-center" v-if="isLoadingBottom">
+                <Spin>
+                  <div class="loader">
+                    <svg class="circular" viewBox="25 25 50 50">
+                      <circle
+                        class="path"
+                        cx="50"
+                        cy="50"
+                        r="20"
+                        fill="none"
+                        stroke-width="5"
+                        stroke-miterlimit="10"
+                      />
+                    </svg>
+                  </div>
+                </Spin>
+              </li>
+            </transition>
           </ul>
         </vue-scroll>
       </div>
@@ -192,8 +209,7 @@ export default {
     ...mapState({
       status: state => state.mailsys.status,
       hoveredIndex: state => state.mailsys.hoveredIndex,
-      selectedIndex: state => state.mailsys.selectedIndex,
-      isLoading: state => state.mailsys.isLoading
+      selectedIndex: state => state.mailsys.selectedIndex
     }),
     ...mapGetters({
       parse: "mailsys/parse",
@@ -225,6 +241,25 @@ export default {
       let w = e.currentTarget.offsetWidth;
       this.positionX = ((w - e.layerX) / w) * 100 + "%";
     },
+    handleScrolling(e) {
+      if (this.process < e.process && e.process > 0.99 && !this.isLoadingBottom) {
+        this.fetchMailList();
+      }
+      this.process = e.process;
+    },
+    fetchMailList() {
+      const max = Math.max.apply(this, this.pages);
+      this.isLoadingBottom = true
+      this.fetchMailListAsync({
+        target: this.targetName,
+        currentPage: max + 1
+      }).then(() => {
+        this.pages.push(max + 1);
+        setTimeout(() => {
+          this.isLoadingBottom = false
+        }, 1000);
+      });
+    },
     find(uid) {
       return this.mails.length > 0
         ? this.mails.find(f => {
@@ -239,9 +274,15 @@ export default {
       return parseInt(String(id), "36") || null;
     },
     refresh() {
+      this.$refs.scroller.scrollTo({
+        x: 0,
+        y: 0
+      }, 300)
+      this.isLoadingTop = true
       this.fetchMailListAsync({
-        target: this.targetName,
-        showState: true
+        target: this.targetName
+      }).then(() => {
+        this.isLoadingTop = false
       });
     },
     dateNormalize
@@ -249,6 +290,9 @@ export default {
   mixins: [base],
   data() {
     return {
+      isLoadingTop: false,
+      isLoadingBottom: false,
+      pages: [1],
       html: "",
       positionX: "100%",
       start: 0,
@@ -294,22 +338,28 @@ export default {
       /* If routes change, load the current */
       /* Then, Has a better way? */
       if (current) this.setCurrent(current);
-      if (target && this.targetName !== target) {
+      if (target && this.targetName !== target && this.mails.length === 0) {
         this.targetName = target;
+        this.isLoadingTop = true;
         this.fetchMailListAsync({
           target,
           showState: true
+        }).then(() => {
+          this.isLoadingTop = false;
         });
       }
     }
   },
   created() {
-    let { id, target = 'inbox' } = this.$route.params;
+    let { id, target = "inbox" } = this.$route.params;
     this.currentId = id;
     this.targetName = target;
+    this.isLoadingTop = true;
     this.fetchMailListAsync({
       target,
       showState: true
+    }).then(() => {
+      this.isLoadingTop = false;
     });
   },
   updated() {},

@@ -1,5 +1,6 @@
-import { installDB, fetchDB, updateDB, login, fetchList, fetchDetails, markSeen } from '../service'
+import { installDB, fetchDB, updateDB, auth, fetchList, fetchDetails, markSeen } from '../service'
 import { sort, isunseen } from '../utils'
+import { MAIL } from '../constants'
 
 installDB([
   {
@@ -35,7 +36,6 @@ const state = {
   selectedIndex: -1,
   uuid: null,
   status: {},
-  isLoading: false,
   current: null
 }
 
@@ -45,9 +45,6 @@ const mutations = {
     state.mails[target.toLowerCase()].data = data
     state.uuid = uuid
     state.status = status
-  },
-  loading(state, payload) {
-    state.isLoading = payload
   },
   markSeen(state, payload) {
     state.mails.inbox = { ...payload }
@@ -76,7 +73,7 @@ const actions = {
         return f.attributes.uid === uid
       })
       if (item) {
-        item.attributes.flags = ['\\Seen']
+        item.attributes.flags = [MAIL.SEEN]
         updateDB(target, uid, item)
       }
       commit('markSeen', state.mails.inbox)
@@ -96,6 +93,13 @@ const actions = {
     commit('setCurrent', value)
   },
   fetchMailListAsync({ commit }, value) {
+    async function checkAuth() {
+      const loginResult = await auth()
+      if (loginResult instanceof Error || loginResult.error || loginResult.errorno || !loginResult.uuid) {
+        return
+      }
+      return loginResult.uuid
+    }
     function commitFetch(target, uuid) {
       return (list, statusCode) => {
         return commit('fetch', {
@@ -108,59 +112,53 @@ const actions = {
         })
       }
     }
-    (async () => {
-      let { target, showState } = value
-      try {
-        let fetchDBResult = await fetchDB(target), temp
-        commitFetch(target)(temp = fetchDBResult.result.map(m => m.data), 'success')
-        if (showState) commit('loading', true)
-        let loginResult = await login()
-        let addlist = [], removeList = [], mailList = []
-        if (loginResult instanceof Error || loginResult.error || loginResult.errorno || !loginResult.uuid) {
-          mailList = temp
-          if (showState) commit('loading', false)
-          return commitFetch(target)(mailList, 'error')
-        }
-        let commitFetchLoginResult = commitFetch(target, loginResult.uuid)
-        let fetchListResult = await fetchList(loginResult.uuid, target)
-        if (fetchDBResult.result && fetchDBResult.result.length > 0) {
-          fetchDBResult.result.forEach(f => {
-            if (!fetchListResult.result.some(s => {
-              return s === f.uid
-            })) {
-              removeList.push(f.uid)
-            } else {
-              mailList.push(f.data)
-            }
-          })
-          fetchListResult.result.forEach(f => {
-            if (!fetchDBResult.result.some(s => {
-              return s.uid === f
-            })) {
-              addlist.push(f)
-            }
-          })
-        } else {
-          addlist = fetchListResult.result
-        }
-        let fetchDetailsResult = await fetchDetails(loginResult.uuid, addlist)
-        let transaction = fetchDBResult.db.transaction([target], "readwrite")
-        let store = transaction.objectStore(target)
-        for (var r in fetchDetailsResult.result) {
-          let o = fetchDetailsResult.result[r]
-          mailList.push(o)
-          store.add({
-            uid: o.attributes.uid,
-            data: o
-          })
-        }
-        removeList.forEach(a => store.delete(a))
-        commitFetchLoginResult(mailList, 'success')
-        if (showState) commit('loading', false)
-      } catch (e) {
-        console.log(e)
+    async function fetch() {
+      let { target, currentPage = 1 } = value
+      const authId = await checkAuth()
+      if (!authId) {
+        return
       }
-    })()
+      const fetchDBResult = await fetchDB(target)
+      commitFetch(target)(fetchDBResult.result.map(m => m.data), 'success')
+      const commitFetchLoginResult = commitFetch(target, authId)
+      const fetchListResult = await fetchList(authId, target)
+      const dolist = fetchListResult && fetchListResult.result.slice((currentPage - 1) * 20, currentPage * 20)
+      const existing = fetchDBResult.result
+      let addlist = [], mailList = existing.map(o => o.data)
+      if (existing && existing.length > 0) {
+        dolist.forEach(f => {
+          if (!existing.some(s => {
+            return s.uid === f
+          })) {
+            addlist.push(f)
+          }
+        })
+      } else {
+        addlist = addlist.concat(dolist)
+      }
+      addlist = addlist.slice(0, 20) //get the first 20 items
+      if (addlist.length === 0) {
+        return
+      }
+      let fetchDetailsResult = await fetchDetails(authId, addlist)
+      let transaction = fetchDBResult.db.transaction([target], "readwrite")
+      let store = transaction.objectStore(target)
+      for (var r in fetchDetailsResult.result) {
+        let o = fetchDetailsResult.result[r]
+        mailList.push(o)
+        store.add({
+          uid: o.attributes.uid,
+          data: o
+        })
+      }
+      commitFetchLoginResult(mailList, 'success')
+    }
+    try {
+      return fetch()
+    } catch (e) {
+      console.error(e)
+      return fetch()
+    }
   }
 }
 
